@@ -35,6 +35,9 @@ access: 3rd-Party
 created: '2025-01-30'
 modified: '2025-04-08'
 position: Consuming
+segments:
+  - Documentation
+  - SDKs
 description: >-
   Sideko is an API tooling generation platform, that uses OpenAPI Specifications
   to create SDKs, Docs, CLIs and Mock Servers.Offering great tooling for your
