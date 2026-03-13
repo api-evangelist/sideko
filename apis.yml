@@ -14,6 +14,14 @@ apis:
     properties:
       - url: https://www.sideko.dev/
         type: Documentation
+      - url: https://docs.sideko.dev/
+        type: Getting Started
+      - url: https://authentication.sideko.dev/sign-up
+        type: Sign Up
+      - url: https://sideko.dev/pricing
+        type: Pricing
+      - url: https://github.com/Sideko-Inc/sideko
+        type: GitHub
     description: >-
       Sideko is an API tooling generation platform, that uses OpenAPI
       Specifications to create SDKs, Docs, CLIs and Mock Servers.Offering great
@@ -21,7 +29,7 @@ apis:
       you use Sideko, you can offer a suite of API tools without writing any
       code yourself, because Sideko generates the code for you. Sideko is
       helping some of the largest organizations in the world improve their API
-      experiences. 
+      experiences.
 name: Sideko
 tags:
   - Documentation
