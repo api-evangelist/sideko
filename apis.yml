@@ -5,11 +5,11 @@ apis:
   - aid: sideko:sideko
     name: Sideko
     tags:
-      - Documentation
-      - SDKs
-      - Mock Servers
       - CLI
+      - Documentation
+      - Mock Servers
       - Platform
+      - SDKs
     humanURL: https://www.sideko.dev/
     properties:
       - url: https://www.sideko.dev/
@@ -32,11 +32,11 @@ apis:
       experiences.
 name: Sideko
 tags:
-  - Documentation
-  - SDKs
-  - Mock Servers
   - CLI
+  - Documentation
+  - Mock Servers
   - Platform
+  - SDKs
 type: Contract
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
