@@ -1,0 +1,57 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "sideko": "https://api.sideko.dev/vocab/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "ApiProject": "sideko:ApiProject",
+    "ApiVersion": "sideko:ApiVersion",
+    "SdkGeneration": "sideko:SdkGeneration",
+    "DocSite": "sideko:DocSite",
+    "MockServer": "sideko:MockServer",
+    "ApiKey": "sideko:ApiKey",
+
+    "id": "@id",
+    "name": "schema:name",
+    "description": "schema:description",
+    "slug": "sideko:slug",
+    "versionCount": {
+      "@id": "sideko:versionCount",
+      "@type": "xsd:integer"
+    },
+    "createdAt": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "updatedAt": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+    "version": "schema:version",
+    "specFormat": "sideko:specFormat",
+    "language": "sideko:programmingLanguage",
+    "status": "sideko:status",
+    "downloadUrl": {
+      "@id": "schema:downloadUrl",
+      "@type": "@id"
+    },
+    "endpoint": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "maskedKey": "sideko:maskedKey",
+    "projectId": {
+      "@id": "sideko:belongsToProject",
+      "@type": "@id"
+    },
+    "versionId": {
+      "@id": "sideko:basedOnVersion",
+      "@type": "@id"
+    }
+  }
+}

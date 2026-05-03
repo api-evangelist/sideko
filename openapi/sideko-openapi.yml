@@ -1,0 +1,873 @@
+openapi: 3.1.0
+info:
+  title: Sideko API
+  description: >-
+    The Sideko REST API enables developers to programmatically manage API
+    projects, generate SDKs in multiple languages, deploy CLI tools, create
+    mock servers, and publish API documentation. The API powers the Sideko
+    platform which transforms OpenAPI specifications into complete developer
+    tooling suites automatically.
+  version: '1.0'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/
+servers:
+  - url: https://api.sideko.dev/v1
+    description: Sideko Production API
+tags:
+  - name: API Projects
+    description: >-
+      Manage API projects within the Sideko platform. Projects organize OpenAPI
+      specifications and the tooling generated from them.
+  - name: SDK Generation
+    description: >-
+      Trigger and manage SDK generation jobs for supported languages including
+      Python, TypeScript, Java, Go, Ruby, and Rust.
+  - name: Documentation
+    description: >-
+      Publish and manage API documentation sites generated from OpenAPI
+      specifications.
+  - name: Mock Servers
+    description: >-
+      Deploy and manage mock server instances that simulate API behavior based
+      on OpenAPI specs.
+  - name: Authentication
+    description: >-
+      Manage API keys and authentication for the Sideko platform.
+security:
+  - ApiKeyAuth: []
+paths:
+  /api-projects:
+    get:
+      operationId: listApiProjects
+      summary: List API Projects
+      description: >-
+        Returns a paginated list of all API projects in the authenticated
+        organization. Each project contains one or more API versions defined
+        by OpenAPI specifications.
+      tags:
+        - API Projects
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+          description: Number of results per page
+      responses:
+        '200':
+          description: List of API projects returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiProjectList'
+        '401':
+          description: Invalid or missing API key
+    post:
+      operationId: createApiProject
+      summary: Create API Project
+      description: >-
+        Creates a new API project in the authenticated organization. The project
+        will hold OpenAPI specifications and serve as the container for generated
+        SDKs, documentation, and mock servers.
+      tags:
+        - API Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiProjectRequest'
+      responses:
+        '201':
+          description: API project created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiProject'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '409':
+          description: Project with this name already exists
+
+  /api-projects/{projectId}:
+    get:
+      operationId: getApiProject
+      summary: Get API Project
+      description: >-
+        Returns the details of a specific API project by its unique identifier,
+        including project metadata, versions, and associated tooling.
+      tags:
+        - API Projects
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: API project details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiProject'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    put:
+      operationId: updateApiProject
+      summary: Update API Project
+      description: >-
+        Updates the metadata of an existing API project, including the project
+        name, description, and configuration settings.
+      tags:
+        - API Projects
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApiProjectRequest'
+      responses:
+        '200':
+          description: API project updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiProject'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    delete:
+      operationId: deleteApiProject
+      summary: Delete API Project
+      description: >-
+        Permanently deletes an API project and all associated versions, generated
+        SDKs, documentation, and mock server configurations.
+      tags:
+        - API Projects
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      responses:
+        '204':
+          description: API project deleted successfully
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+
+  /api-projects/{projectId}/versions:
+    get:
+      operationId: listApiVersions
+      summary: List API Versions
+      description: >-
+        Returns all versions of an API project. Each version corresponds to
+        a distinct OpenAPI specification uploaded to the project.
+      tags:
+        - API Projects
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of API versions returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiVersionList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: createApiVersion
+      summary: Create API Version
+      description: >-
+        Uploads a new OpenAPI specification to create a new version of the API
+        project. Accepts OpenAPI 3.0 and 3.1 specifications in JSON or YAML
+        format.
+      tags:
+        - API Projects
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateApiVersionRequest'
+      responses:
+        '201':
+          description: API version created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiVersion'
+        '400':
+          description: Invalid OpenAPI specification
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+
+  /api-projects/{projectId}/sdks:
+    get:
+      operationId: listSdkGenerations
+      summary: List SDK Generations
+      description: >-
+        Returns all SDK generation jobs for an API project across all target
+        languages, including their status and download URLs when complete.
+      tags:
+        - SDK Generation
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of SDK generation jobs returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGenerationList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: triggerSdkGeneration
+      summary: Trigger SDK Generation
+      description: >-
+        Initiates an SDK generation job for the specified API project version
+        and target programming language. The job runs asynchronously and the
+        resulting SDK can be downloaded when the status is complete.
+      tags:
+        - SDK Generation
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerSdkRequest'
+      responses:
+        '202':
+          description: SDK generation job accepted and queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGeneration'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+
+  /api-projects/{projectId}/sdks/{sdkId}:
+    get:
+      operationId: getSdkGeneration
+      summary: Get SDK Generation
+      description: >-
+        Returns the status and details of a specific SDK generation job. When
+        the status is complete, a download URL is provided to retrieve the
+        generated SDK archive.
+      tags:
+        - SDK Generation
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/sdkId'
+      responses:
+        '200':
+          description: SDK generation job details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGeneration'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: SDK generation job not found
+
+  /api-projects/{projectId}/docs:
+    get:
+      operationId: listDocumentationSites
+      summary: List Documentation Sites
+      description: >-
+        Returns all documentation sites deployed for the API project, including
+        their deployment status, URLs, and configuration.
+      tags:
+        - Documentation
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of documentation sites returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocSiteList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: deployDocumentationSite
+      summary: Deploy Documentation Site
+      description: >-
+        Deploys or updates an API documentation site for the specified project
+        version. Sideko generates and hosts a fully-featured documentation
+        portal with interactive examples, authentication guides, and API
+        reference pages.
+      tags:
+        - Documentation
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployDocSiteRequest'
+      responses:
+        '202':
+          description: Documentation site deployment initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocSite'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+
+  /api-projects/{projectId}/mock-servers:
+    get:
+      operationId: listMockServers
+      summary: List Mock Servers
+      description: >-
+        Returns all mock server instances deployed for the API project,
+        including their status, endpoint URLs, and configuration.
+      tags:
+        - Mock Servers
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of mock servers returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MockServerList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: deployMockServer
+      summary: Deploy Mock Server
+      description: >-
+        Deploys a mock server for the specified API project version. The mock
+        server automatically generates realistic responses based on the OpenAPI
+        specification schemas and examples.
+      tags:
+        - Mock Servers
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployMockServerRequest'
+      responses:
+        '202':
+          description: Mock server deployment initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MockServer'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+
+  /api-projects/{projectId}/mock-servers/{serverId}:
+    delete:
+      operationId: deleteMockServer
+      summary: Delete Mock Server
+      description: >-
+        Permanently shuts down and removes a mock server instance. All traffic
+        to the mock server endpoint will fail after deletion.
+      tags:
+        - Mock Servers
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/serverId'
+      responses:
+        '204':
+          description: Mock server deleted successfully
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: Mock server not found
+
+  /auth/api-keys:
+    get:
+      operationId: listApiKeys
+      summary: List API Keys
+      description: >-
+        Returns all API keys for the authenticated organization, including
+        their names, scopes, and creation timestamps. Key values are masked
+        for security.
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: List of API keys returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyList'
+        '401':
+          description: Invalid or missing API key
+    post:
+      operationId: createApiKey
+      summary: Create API Key
+      description: >-
+        Creates a new API key for the authenticated organization. The full key
+        value is only returned once at creation time and cannot be retrieved
+        again.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+      responses:
+        '201':
+          description: API key created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyCreated'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+
+  /auth/api-keys/{keyId}:
+    delete:
+      operationId: deleteApiKey
+      summary: Delete API Key
+      description: >-
+        Permanently revokes and deletes an API key. Any requests using the
+        deleted key will be rejected immediately.
+      tags:
+        - Authentication
+      parameters:
+        - $ref: '#/components/parameters/keyId'
+      responses:
+        '204':
+          description: API key deleted successfully
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API key not found
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+    sdkId:
+      name: sdkId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the SDK generation job
+    serverId:
+      name: serverId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the mock server
+    keyId:
+      name: keyId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API key
+
+  schemas:
+    ApiProject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the project
+        name:
+          type: string
+          description: Human-readable name of the API project
+        description:
+          type: string
+          description: Description of the API and its purpose
+        slug:
+          type: string
+          description: URL-safe identifier for the project
+        versionCount:
+          type: integer
+          description: Number of API versions in this project
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the project was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the project was last updated
+
+    ApiProjectList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiProject'
+        total:
+          type: integer
+          description: Total number of projects
+        page:
+          type: integer
+          description: Current page number
+        limit:
+          type: integer
+          description: Number of results per page
+
+    CreateApiProjectRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name for the API project
+        description:
+          type: string
+          description: Optional description of the API
+
+    UpdateApiProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New name for the API project
+        description:
+          type: string
+          description: Updated description of the API
+
+    ApiVersion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the API version
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        version:
+          type: string
+          description: Version string from the OpenAPI spec info.version
+        specFormat:
+          type: string
+          enum:
+            - openapi3_0
+            - openapi3_1
+          description: OpenAPI specification format version
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the version was created
+
+    ApiVersionList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiVersion'
+        total:
+          type: integer
+
+    CreateApiVersionRequest:
+      type: object
+      required:
+        - spec
+      properties:
+        spec:
+          type: string
+          format: binary
+          description: OpenAPI specification file (JSON or YAML)
+        version:
+          type: string
+          description: Override the version from the spec info.version field
+
+    SdkGeneration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the SDK generation job
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version used for generation
+        language:
+          type: string
+          enum:
+            - python
+            - typescript
+            - java
+            - go
+            - ruby
+            - rust
+          description: Target programming language for the SDK
+        status:
+          type: string
+          enum:
+            - pending
+            - running
+            - complete
+            - failed
+          description: Current status of the generation job
+        downloadUrl:
+          type: string
+          format: uri
+          description: URL to download the generated SDK archive (available when complete)
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the generation job was created
+        completedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the generation job completed
+
+    SdkGenerationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SdkGeneration'
+        total:
+          type: integer
+
+    TriggerSdkRequest:
+      type: object
+      required:
+        - language
+        - versionId
+      properties:
+        language:
+          type: string
+          enum:
+            - python
+            - typescript
+            - java
+            - go
+            - ruby
+            - rust
+          description: Target programming language for the SDK
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to generate SDK from
+
+    DocSite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the documentation site
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        url:
+          type: string
+          format: uri
+          description: Public URL of the documentation site
+        status:
+          type: string
+          enum:
+            - deploying
+            - live
+            - failed
+          description: Current deployment status
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the site was first deployed
+
+    DocSiteList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocSite'
+
+    DeployDocSiteRequest:
+      type: object
+      required:
+        - versionId
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to deploy documentation for
+        customDomain:
+          type: string
+          description: Optional custom domain for the documentation site
+
+    MockServer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the mock server
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        endpoint:
+          type: string
+          format: uri
+          description: Public endpoint URL of the mock server
+        status:
+          type: string
+          enum:
+            - deploying
+            - running
+            - stopped
+            - failed
+          description: Current status of the mock server
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the mock server was deployed
+
+    MockServerList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MockServer'
+
+    DeployMockServerRequest:
+      type: object
+      required:
+        - versionId
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to deploy mock server for
+
+    ApiKey:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the API key
+        name:
+          type: string
+          description: Human-readable name for the API key
+        maskedKey:
+          type: string
+          description: Masked version of the key for display (e.g., sk-...abc1)
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the key was created
+
+    ApiKeyCreated:
+      allOf:
+        - $ref: '#/components/schemas/ApiKey'
+        - type: object
+          properties:
+            key:
+              type: string
+              description: Full API key value (only returned at creation time)
+
+    ApiKeyList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiKey'
+
+    CreateApiKeyRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Human-readable name for the API key

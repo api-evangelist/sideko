@@ -1,0 +1,315 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Sideko API"
+  description: "REST API for the Sideko platform enabling programmatic management of API projects, SDK generation, documentation sites, and mock servers."
+  tags:
+    - API Tooling
+    - SDK Generation
+    - Documentation
+    - Mock Servers
+    - Platform
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      SIDEKO_API_KEY: SIDEKO_API_KEY
+
+capability:
+  consumes:
+    - type: http
+      namespace: sideko
+      baseUri: https://api.sideko.dev/v1
+      description: "Sideko platform API for managing API tooling lifecycle"
+      authentication:
+        type: apikey
+        key: x-sideko-key
+        value: "{{SIDEKO_API_KEY}}"
+        placement: header
+      resources:
+        - name: api-projects
+          path: /api-projects
+          description: "API project management"
+          operations:
+            - name: list-api-projects
+              method: GET
+              description: "List all API projects"
+              inputParameters:
+                - name: page
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Page number"
+                - name: limit
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Results per page"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-api-project
+              method: POST
+              description: "Create a new API project"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  name: "{{tools.name}}"
+                  description: "{{tools.description}}"
+
+        - name: api-project
+          path: /api-projects/{projectId}
+          description: "Single API project operations"
+          operations:
+            - name: get-api-project
+              method: GET
+              description: "Get an API project by ID"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: update-api-project
+              method: PUT
+              description: "Update an API project"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  name: "{{tools.name}}"
+                  description: "{{tools.description}}"
+            - name: delete-api-project
+              method: DELETE
+              description: "Delete an API project"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: api-versions
+          path: /api-projects/{projectId}/versions
+          description: "API version management"
+          operations:
+            - name: list-api-versions
+              method: GET
+              description: "List all versions of an API project"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: sdk-generations
+          path: /api-projects/{projectId}/sdks
+          description: "SDK generation job management"
+          operations:
+            - name: list-sdk-generations
+              method: GET
+              description: "List SDK generation jobs for a project"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: trigger-sdk-generation
+              method: POST
+              description: "Trigger an SDK generation job"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  language: "{{tools.language}}"
+                  versionId: "{{tools.versionId}}"
+
+        - name: documentation-sites
+          path: /api-projects/{projectId}/docs
+          description: "Documentation site management"
+          operations:
+            - name: list-documentation-sites
+              method: GET
+              description: "List documentation sites for a project"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deploy-documentation-site
+              method: POST
+              description: "Deploy an API documentation site"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  versionId: "{{tools.versionId}}"
+
+        - name: mock-servers
+          path: /api-projects/{projectId}/mock-servers
+          description: "Mock server management"
+          operations:
+            - name: list-mock-servers
+              method: GET
+              description: "List mock server instances for a project"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deploy-mock-server
+              method: POST
+              description: "Deploy a mock server instance"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project UUID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  versionId: "{{tools.versionId}}"
+
+        - name: api-keys
+          path: /auth/api-keys
+          description: "API key management"
+          operations:
+            - name: list-api-keys
+              method: GET
+              description: "List all API keys"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-api-key
+              method: POST
+              description: "Create a new API key"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  name: "{{tools.name}}"
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: sideko-rest
+      resources:
+        - path: /v1/api-projects
+          name: api-projects
+          description: "API project management"
+          operations:
+            - method: GET
+              name: list-api-projects
+              description: "List all API projects"
+            - method: POST
+              name: create-api-project
+              description: "Create a new API project"
+
+    - type: mcp
+      port: 9100
+      namespace: sideko-mcp
+      transport: http
+      tools:
+        - name: list-api-projects
+          description: "List all API projects in the Sideko organization"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "sideko.list-api-projects"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-api-project
+          description: "Create a new API project in Sideko"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "sideko.create-api-project"
+          outputParameters:
+            - type: object
+              mapping: "$."

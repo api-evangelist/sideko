@@ -1,0 +1,59 @@
+{
+  "title": "Sideko API Project Structure",
+  "description": "Hierarchical structure of a Sideko API project and its associated resources",
+  "type": "object",
+  "structure": {
+    "ApiProject": {
+      "description": "Top-level API project container",
+      "fields": {
+        "id": { "type": "uuid", "role": "identifier" },
+        "name": { "type": "string", "role": "label" },
+        "slug": { "type": "string", "role": "url-key" },
+        "description": { "type": "string", "role": "description" },
+        "versionCount": { "type": "integer", "role": "count" },
+        "createdAt": { "type": "datetime", "role": "audit" },
+        "updatedAt": { "type": "datetime", "role": "audit" }
+      },
+      "children": {
+        "ApiVersion": {
+          "description": "An OpenAPI specification version uploaded to the project",
+          "fields": {
+            "id": { "type": "uuid", "role": "identifier" },
+            "version": { "type": "string", "role": "label" },
+            "specFormat": { "type": "enum", "values": ["openapi3_0", "openapi3_1"] },
+            "createdAt": { "type": "datetime", "role": "audit" }
+          },
+          "children": {
+            "SdkGeneration": {
+              "description": "An SDK generation job producing client code in a target language",
+              "fields": {
+                "id": { "type": "uuid", "role": "identifier" },
+                "language": { "type": "enum", "values": ["python", "typescript", "java", "go", "ruby", "rust"] },
+                "status": { "type": "enum", "values": ["pending", "running", "complete", "failed"] },
+                "downloadUrl": { "type": "uri", "role": "output" },
+                "completedAt": { "type": "datetime", "role": "audit" }
+              }
+            },
+            "DocSite": {
+              "description": "A deployed API documentation site generated from the spec",
+              "fields": {
+                "id": { "type": "uuid", "role": "identifier" },
+                "url": { "type": "uri", "role": "output" },
+                "status": { "type": "enum", "values": ["deploying", "live", "failed"] },
+                "customDomain": { "type": "string", "role": "config" }
+              }
+            },
+            "MockServer": {
+              "description": "A deployed mock server instance simulating API responses",
+              "fields": {
+                "id": { "type": "uuid", "role": "identifier" },
+                "endpoint": { "type": "uri", "role": "output" },
+                "status": { "type": "enum", "values": ["deploying", "running", "stopped", "failed"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

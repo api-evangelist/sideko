@@ -1,0 +1,89 @@
+vocabulary:
+  name: Sideko Platform Vocabulary
+  description: >-
+    Domain vocabulary and taxonomy for the Sideko API tooling platform, covering
+    API project management, SDK generation, documentation, and mock server concepts.
+  version: '1.0'
+  created: '2026-05-02'
+  provider: Sideko
+
+terms:
+  - term: API Project
+    definition: >-
+      A container in the Sideko platform that holds one or more versioned OpenAPI
+      specifications and organizes the generated tooling (SDKs, docs, mock servers)
+      produced from those specifications.
+    synonyms:
+      - API definition
+      - API specification project
+    related:
+      - API Version
+      - SDK Generation
+
+  - term: API Version
+    definition: >-
+      A specific revision of an OpenAPI specification uploaded to an API project.
+      Each version corresponds to a distinct OpenAPI 3.x document and may have
+      SDKs, documentation, and mock servers generated from it independently.
+    synonyms:
+      - spec version
+      - API revision
+
+  - term: SDK Generation
+    definition: >-
+      An asynchronous job that transforms an OpenAPI specification into a
+      idiomatic client SDK for a target programming language. Sideko supports
+      generation for Python, TypeScript, Java, Go, Ruby, and Rust.
+    synonyms:
+      - code generation
+      - client generation
+    related:
+      - API Version
+
+  - term: Mock Server
+    definition: >-
+      A deployed server instance that simulates the behavior of a real API by
+      generating synthetic responses based on an OpenAPI specification's schemas
+      and examples. Used for development and testing without a live backend.
+    synonyms:
+      - API simulator
+      - stub server
+      - mock API
+
+  - term: Documentation Site
+    definition: >-
+      A hosted web portal automatically generated from an OpenAPI specification
+      that provides interactive API reference documentation, authentication guides,
+      code examples, and a try-it-now console for API consumers.
+    synonyms:
+      - API docs
+      - developer portal
+      - API reference
+
+  - term: Slug
+    definition: >-
+      A URL-safe, kebab-case identifier derived from the project name used
+      in human-readable URLs and API paths to reference a specific API project.
+    synonyms:
+      - url-safe name
+      - human-readable ID
+
+  - term: API Key
+    definition: >-
+      A secret credential used to authenticate requests to the Sideko platform API.
+      Passed via the x-sideko-key HTTP header. Keys are shown in full only at
+      creation time and thereafter displayed in masked form.
+    synonyms:
+      - credentials
+      - access key
+      - authentication token
+
+tags:
+  - API Tooling
+  - SDK Generation
+  - Documentation
+  - Mock Servers
+  - Developer Experience
+  - OpenAPI
+  - Code Generation
+  - Platform

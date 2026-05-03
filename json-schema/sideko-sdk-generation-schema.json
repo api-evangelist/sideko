@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.sideko.dev/schemas/sdk-generation",
+  "title": "SdkGeneration",
+  "description": "Represents an SDK generation job in the Sideko platform, tracking the status and output of generating a client SDK from an OpenAPI specification.",
+  "type": "object",
+  "required": ["id", "projectId", "versionId", "language", "status", "createdAt"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier of the SDK generation job"
+    },
+    "projectId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identifier of the parent API project"
+    },
+    "versionId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identifier of the API version used for SDK generation"
+    },
+    "language": {
+      "type": "string",
+      "enum": ["python", "typescript", "java", "go", "ruby", "rust"],
+      "description": "Target programming language for the generated SDK"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "complete", "failed"],
+      "description": "Current lifecycle status of the SDK generation job"
+    },
+    "downloadUrl": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "URL to download the generated SDK archive when status is complete"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the generation job was queued"
+    },
+    "completedAt": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the generation job finished (null if not yet complete)"
+    }
+  }
+}

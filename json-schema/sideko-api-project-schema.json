@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.sideko.dev/schemas/api-project",
+  "title": "ApiProject",
+  "description": "Represents an API project in the Sideko platform that contains OpenAPI specifications and generated tooling.",
+  "type": "object",
+  "required": ["id", "name", "slug", "versionCount", "createdAt", "updatedAt"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier of the API project"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Human-readable name of the API project"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description of the API and its purpose"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "URL-safe kebab-case identifier for the project"
+    },
+    "versionCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of API specification versions uploaded to this project"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the project was created"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the project was last modified"
+    }
+  }
+}

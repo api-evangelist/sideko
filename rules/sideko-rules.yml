@@ -1,0 +1,107 @@
+extends: spectral:oas
+rules:
+  # Sideko API uses UUID format for all resource identifiers
+  sideko-id-format-uuid:
+    description: Resource identifiers must use UUID format
+    message: "The '{{property}}' field should use format: uuid"
+    severity: warn
+    given: "$.components.schemas[*].properties[?(@.description =~ /identifier|id/i)]"
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+          - uuid
+
+  # All list endpoints must return an items array and total count
+  sideko-list-response-shape:
+    description: List response schemas must include items array and total count
+    message: List response schemas should have items (array) and total (integer) properties
+    severity: warn
+    given: "$.components.schemas[?(@.properties.items && @.type == 'object')]"
+    then:
+      field: properties.total
+      function: truthy
+
+  # SDK language values must be from the approved enumeration
+  sideko-sdk-language-enum:
+    description: SDK language must be from the supported language list
+    message: SDK language must be one of python, typescript, java, go, ruby, or rust
+    severity: error
+    given: "$.components.schemas[?(@.properties.language)].properties.language"
+    then:
+      field: enum
+      function: truthy
+
+  # Status fields must use consistent enumeration patterns
+  sideko-status-enum:
+    description: Status fields should use enumeration
+    message: "Status field '{{property}}' should define an enum"
+    severity: warn
+    given: "$.components.schemas[*].properties.status"
+    then:
+      field: enum
+      function: truthy
+
+  # All POST endpoints for resource creation should return 201
+  sideko-create-returns-201:
+    description: Resource creation endpoints should return HTTP 201
+    message: POST operations creating resources should define a 201 response
+    severity: warn
+    given: "$.paths[*].post.responses"
+    then:
+      field: "201"
+      function: truthy
+
+  # All DELETE operations should return 204 No Content
+  sideko-delete-returns-204:
+    description: Delete operations should return HTTP 204 No Content
+    message: DELETE operations should define a 204 response
+    severity: warn
+    given: "$.paths[*].delete.responses"
+    then:
+      field: "204"
+      function: truthy
+
+  # Authentication header must use x-sideko-key convention
+  sideko-api-key-header-name:
+    description: API key header must use x-sideko-key
+    message: API key authentication must use the header name x-sideko-key
+    severity: error
+    given: "$.components.securitySchemes[?(@.type == 'apiKey')].name"
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+          - x-sideko-key
+
+  # Operation IDs must use camelCase
+  sideko-operation-id-camel-case:
+    description: Operation IDs must use camelCase naming
+    message: "Operation ID '{{value}}' must use camelCase (e.g., listApiProjects, createApiKey)"
+    severity: warn
+    given: "$.paths[*][*].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]+$"
+
+  # All operations must have a summary
+  sideko-operation-summary-required:
+    description: All operations must have a summary
+    message: Operation is missing a summary
+    severity: error
+    given: "$.paths[*][*]"
+    then:
+      field: summary
+      function: truthy
+
+  # Path parameters must be referenced in components/parameters
+  sideko-path-params-use-refs:
+    description: Path parameters should use $ref to components/parameters
+    message: Path parameters should reference shared parameter definitions
+    severity: hint
+    given: "$.paths[*][*].parameters[?(@.in == 'path')]"
+    then:
+      field: $ref
+      function: truthy

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://api.sideko.dev/v1/api-projects/3fa85f64-5717-4562-b3fc-2c963f66afa6/sdks",
+    "headers": {
+      "x-sideko-key": "sk-your-api-key",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "language": "python",
+      "versionId": "8c1f2e33-abcd-4321-8765-fedcba987654"
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": {
+      "id": "d9f7b3a1-5678-4901-bcde-f01234567890",
+      "projectId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "versionId": "8c1f2e33-abcd-4321-8765-fedcba987654",
+      "language": "python",
+      "status": "pending",
+      "downloadUrl": null,
+      "createdAt": "2026-05-02T12:00:00Z",
+      "completedAt": null
+    }
+  }
+}

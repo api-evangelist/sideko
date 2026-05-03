@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.sideko.dev/v1/api-projects",
+    "headers": {
+      "x-sideko-key": "sk-your-api-key"
+    },
+    "query": {
+      "page": 1,
+      "limit": 20
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "name": "Payment API",
+          "description": "REST API for processing payments and managing transactions",
+          "slug": "payment-api",
+          "versionCount": 3,
+          "createdAt": "2025-01-15T10:30:00Z",
+          "updatedAt": "2025-04-20T14:22:00Z"
+        },
+        {
+          "id": "7b3d9e21-1234-4abc-9def-abc123def456",
+          "name": "User Management API",
+          "description": "API for managing users, roles, and permissions",
+          "slug": "user-management-api",
+          "versionCount": 2,
+          "createdAt": "2025-02-01T09:00:00Z",
+          "updatedAt": "2025-04-18T16:45:00Z"
+        }
+      ],
+      "total": 2,
+      "page": 1,
+      "limit": 20
+    }
+  }
+}
