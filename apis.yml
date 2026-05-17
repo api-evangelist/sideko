@@ -31,7 +31,7 @@ apis:
       - url: vocabulary/sideko-vocabulary.yml
         type: Vocabulary
       - url: https://authentication.sideko.dev/sign-up
-        type: Sign Up
+        type: SignUp
       - url: https://sideko.dev/pricing
         type: Pricing
       - url: https://github.com/Sideko-Inc/sideko
@@ -110,7 +110,7 @@ tags:
   - SDKs
   - API Tooling
   - SDK Generation
-type: Contract
+kind: contract
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 created: '2025-01-30'
@@ -132,7 +132,7 @@ common:
     url: https://www.sideko.dev/
   - type: Documentation
     url: https://docs.sideko.dev/
-  - type: Sign Up
+  - type: SignUp
     url: https://authentication.sideko.dev/sign-up
   - type: Pricing
     url: https://sideko.dev/pricing
