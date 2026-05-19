@@ -1,0 +1,139 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sideko API — Mock Servers
+  description: 'Sideko API — Mock Servers. 3 operations. Lead operation: List Mock Servers. Self-contained Naftiko capability
+    covering one Sideko business surface.'
+  tags:
+  - Sideko
+  - Mock Servers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SIDEKO_API_KEY: SIDEKO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sideko-mock-servers
+    baseUri: https://api.sideko.dev/v1
+    description: Sideko API — Mock Servers business capability. Self-contained, no shared references.
+    resources:
+    - name: api-projects-projectId-mock-servers
+      path: /api-projects/{projectId}/mock-servers
+      operations:
+      - name: listmockservers
+        method: GET
+        description: List Mock Servers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deploymockserver
+        method: POST
+        description: Deploy Mock Server
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-projects-projectId-mock-servers-serverId
+      path: /api-projects/{projectId}/mock-servers/{serverId}
+      operations:
+      - name: deletemockserver
+        method: DELETE
+        description: Delete Mock Server
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: x-sideko-key
+      value: '{{env.SIDEKO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: sideko-mock-servers-rest
+    port: 8080
+    description: REST adapter for Sideko API — Mock Servers. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api-projects/{projectid}/mock-servers
+      name: api-projects-projectid-mock-servers
+      description: REST surface for api-projects-projectId-mock-servers.
+      operations:
+      - method: GET
+        name: listmockservers
+        description: List Mock Servers
+        call: sideko-mock-servers.listmockservers
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: deploymockserver
+        description: Deploy Mock Server
+        call: sideko-mock-servers.deploymockserver
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api-projects/{projectid}/mock-servers/{serverid}
+      name: api-projects-projectid-mock-servers-serverid
+      description: REST surface for api-projects-projectId-mock-servers-serverId.
+      operations:
+      - method: DELETE
+        name: deletemockserver
+        description: Delete Mock Server
+        call: sideko-mock-servers.deletemockserver
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sideko-mock-servers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Sideko API — Mock Servers. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-mock-servers
+      description: List Mock Servers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sideko-mock-servers.listmockservers
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deploy-mock-server
+      description: Deploy Mock Server
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sideko-mock-servers.deploymockserver
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-mock-server
+      description: Delete Mock Server
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: sideko-mock-servers.deletemockserver
+      outputParameters:
+      - type: object
+        mapping: $.

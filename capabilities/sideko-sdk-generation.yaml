@@ -1,0 +1,139 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sideko API — SDK Generation
+  description: 'Sideko API — SDK Generation. 3 operations. Lead operation: List SDK Generations. Self-contained Naftiko capability
+    covering one Sideko business surface.'
+  tags:
+  - Sideko
+  - SDK Generation
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SIDEKO_API_KEY: SIDEKO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sideko-sdk-generation
+    baseUri: https://api.sideko.dev/v1
+    description: Sideko API — SDK Generation business capability. Self-contained, no shared references.
+    resources:
+    - name: api-projects-projectId-sdks
+      path: /api-projects/{projectId}/sdks
+      operations:
+      - name: listsdkgenerations
+        method: GET
+        description: List SDK Generations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: triggersdkgeneration
+        method: POST
+        description: Trigger SDK Generation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-projects-projectId-sdks-sdkId
+      path: /api-projects/{projectId}/sdks/{sdkId}
+      operations:
+      - name: getsdkgeneration
+        method: GET
+        description: Get SDK Generation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: x-sideko-key
+      value: '{{env.SIDEKO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: sideko-sdk-generation-rest
+    port: 8080
+    description: REST adapter for Sideko API — SDK Generation. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api-projects/{projectid}/sdks
+      name: api-projects-projectid-sdks
+      description: REST surface for api-projects-projectId-sdks.
+      operations:
+      - method: GET
+        name: listsdkgenerations
+        description: List SDK Generations
+        call: sideko-sdk-generation.listsdkgenerations
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: triggersdkgeneration
+        description: Trigger SDK Generation
+        call: sideko-sdk-generation.triggersdkgeneration
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api-projects/{projectid}/sdks/{sdkid}
+      name: api-projects-projectid-sdks-sdkid
+      description: REST surface for api-projects-projectId-sdks-sdkId.
+      operations:
+      - method: GET
+        name: getsdkgeneration
+        description: Get SDK Generation
+        call: sideko-sdk-generation.getsdkgeneration
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sideko-sdk-generation-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Sideko API — SDK Generation. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-sdk-generations
+      description: List SDK Generations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sideko-sdk-generation.listsdkgenerations
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: trigger-sdk-generation
+      description: Trigger SDK Generation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sideko-sdk-generation.triggersdkgeneration
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-sdk-generation
+      description: Get SDK Generation
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sideko-sdk-generation.getsdkgeneration
+      outputParameters:
+      - type: object
+        mapping: $.

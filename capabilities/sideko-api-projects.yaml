@@ -1,0 +1,281 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sideko API — API Projects
+  description: 'Sideko API — API Projects. 7 operations. Lead operation: List API Projects. Self-contained Naftiko capability
+    covering one Sideko business surface.'
+  tags:
+  - Sideko
+  - API Projects
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SIDEKO_API_KEY: SIDEKO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sideko-api-projects
+    baseUri: https://api.sideko.dev/v1
+    description: Sideko API — API Projects business capability. Self-contained, no shared references.
+    resources:
+    - name: api-projects
+      path: /api-projects
+      operations:
+      - name: listapiprojects
+        method: GET
+        description: List API Projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: page
+          in: query
+          type: integer
+          description: Page number for pagination
+        - name: limit
+          in: query
+          type: integer
+          description: Number of results per page
+      - name: createapiproject
+        method: POST
+        description: Create API Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-projects-projectId
+      path: /api-projects/{projectId}
+      operations:
+      - name: getapiproject
+        method: GET
+        description: Get API Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateapiproject
+        method: PUT
+        description: Update API Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deleteapiproject
+        method: DELETE
+        description: Delete API Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-projects-projectId-versions
+      path: /api-projects/{projectId}/versions
+      operations:
+      - name: listapiversions
+        method: GET
+        description: List API Versions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createapiversion
+        method: POST
+        description: Create API Version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: x-sideko-key
+      value: '{{env.SIDEKO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: sideko-api-projects-rest
+    port: 8080
+    description: REST adapter for Sideko API — API Projects. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api-projects
+      name: api-projects
+      description: REST surface for api-projects.
+      operations:
+      - method: GET
+        name: listapiprojects
+        description: List API Projects
+        call: sideko-api-projects.listapiprojects
+        with:
+          page: rest.page
+          limit: rest.limit
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createapiproject
+        description: Create API Project
+        call: sideko-api-projects.createapiproject
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api-projects/{projectid}
+      name: api-projects-projectid
+      description: REST surface for api-projects-projectId.
+      operations:
+      - method: GET
+        name: getapiproject
+        description: Get API Project
+        call: sideko-api-projects.getapiproject
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateapiproject
+        description: Update API Project
+        call: sideko-api-projects.updateapiproject
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteapiproject
+        description: Delete API Project
+        call: sideko-api-projects.deleteapiproject
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api-projects/{projectid}/versions
+      name: api-projects-projectid-versions
+      description: REST surface for api-projects-projectId-versions.
+      operations:
+      - method: GET
+        name: listapiversions
+        description: List API Versions
+        call: sideko-api-projects.listapiversions
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createapiversion
+        description: Create API Version
+        call: sideko-api-projects.createapiversion
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sideko-api-projects-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Sideko API — API Projects. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-api-projects
+      description: List API Projects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sideko-api-projects.listapiprojects
+      with:
+        page: tools.page
+        limit: tools.limit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-api-project
+      description: Create API Project
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sideko-api-projects.createapiproject
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-api-project
+      description: Get API Project
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sideko-api-projects.getapiproject
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-api-project
+      description: Update API Project
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: sideko-api-projects.updateapiproject
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-api-project
+      description: Delete API Project
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: sideko-api-projects.deleteapiproject
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-api-versions
+      description: List API Versions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sideko-api-projects.listapiversions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-api-version
+      description: Create API Version
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sideko-api-projects.createapiversion
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
