@@ -26,9 +26,19 @@ rules:
   # SDK language values must be from the approved enumeration
   sideko-sdk-language-enum:
     description: SDK language must be from the supported language list
-    message: SDK language must be one of python, typescript, java, go, ruby, or rust
+    message: SDK language must be one of python, typescript, java, go, csharp, or rust
     severity: error
     given: "$.components.schemas[?(@.properties.language)].properties.language"
+    then:
+      field: enum
+      function: truthy
+
+  # MCP transport values must be from the approved enumeration
+  sideko-mcp-transport-enum:
+    description: MCP transport must be from the supported transport list
+    message: MCP transport must be one of stdio, http, or sse
+    severity: error
+    given: "$.components.schemas[?(@.properties.transport)].properties.transport"
     then:
       field: enum
       function: truthy

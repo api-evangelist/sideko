@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sideko API — OpenAPI Linting
+  description: 'Sideko API — OpenAPI Linting. 1 operation. Lead operation: Lint API Project. Self-contained Naftiko capability covering Sideko''s spec-readiness linting surface.'
+  tags:
+  - Sideko
+  - OpenAPI Linting
+  - Quality
+  created: '2026-05-22'
+  modified: '2026-05-22'
+binds:
+- namespace: env
+  keys:
+    SIDEKO_API_KEY: SIDEKO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sideko-linting
+    baseUri: https://api.sideko.dev/v1
+    description: Sideko API — OpenAPI Linting business capability. Runs Sideko's spec-readiness rules before SDK, MCP, or mock generation.
+    resources:
+    - name: api-projects-projectId-lint
+      path: /api-projects/{projectId}/lint
+      operations:
+      - name: lintapiproject
+        method: POST
+        description: Lint API Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Lint request (JSON) with optional versionId and errorsOnly flag.
+          required: false
+    authentication:
+      type: apikey
+      key: x-sideko-key
+      value: '{{env.SIDEKO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: sideko-linting-rest
+    port: 8080
+    description: REST adapter for Sideko API — OpenAPI Linting. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/api-projects/{projectid}/lint
+      name: api-projects-projectid-lint
+      description: REST surface for api-projects-projectId-lint.
+      operations:
+      - method: POST
+        name: lintapiproject
+        description: Lint API Project
+        call: sideko-linting.lintapiproject
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sideko-linting-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Sideko API — OpenAPI Linting. One tool per consumed operation.
+    tools:
+    - name: lint-api-project
+      description: Lint API Project
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sideko-linting.lintapiproject
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

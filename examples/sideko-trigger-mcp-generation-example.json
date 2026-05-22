@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://api.sideko.dev/v1/api-projects/8f3e1d2c-2a91-4c44-9b8d-7e1c0b1d4a55/mcps",
+    "headers": {
+      "x-sideko-key": "sk_live_REDACTED",
+      "content-type": "application/json"
+    },
+    "body": {
+      "versionId": "b9c7d2a1-5e7f-4c11-9aaa-3b4c5d6e7f80",
+      "transport": "stdio"
+    }
+  },
+  "response": {
+    "status": 202,
+    "headers": {
+      "content-type": "application/json"
+    },
+    "body": {
+      "id": "f2e5a8d1-9b6c-4f33-bb44-cc1122334455",
+      "projectId": "8f3e1d2c-2a91-4c44-9b8d-7e1c0b1d4a55",
+      "versionId": "b9c7d2a1-5e7f-4c11-9aaa-3b4c5d6e7f80",
+      "transport": "stdio",
+      "status": "pending",
+      "toolCount": null,
+      "downloadUrl": null,
+      "createdAt": "2026-05-22T16:04:11Z",
+      "completedAt": null
+    }
+  }
+}

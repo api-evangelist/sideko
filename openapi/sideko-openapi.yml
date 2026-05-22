@@ -3,11 +3,12 @@ info:
   title: Sideko API
   description: >-
     The Sideko REST API enables developers to programmatically manage API
-    projects, generate SDKs in multiple languages, deploy CLI tools, create
-    mock servers, and publish API documentation. The API powers the Sideko
+    projects, generate SDKs in six languages, generate Model Context Protocol
+    (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI
+    specifications, and publish API documentation. The API powers the Sideko
     platform which transforms OpenAPI specifications into complete developer
-    tooling suites automatically.
-  version: '1.0'
+    tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
   contact:
     name: Sideko Support
     url: https://docs.sideko.dev/
@@ -27,18 +28,35 @@ tags:
     description: >-
       Manage API projects within the Sideko platform. Projects organize OpenAPI
       specifications and the tooling generated from them.
+  - name: API Versions
+    description: >-
+      Manage versioned OpenAPI specifications inside an API project. Each
+      version is the source of truth that drives SDK, MCP, mock-server, and
+      documentation generation.
   - name: SDK Generation
     description: >-
-      Trigger and manage SDK generation jobs for supported languages including
-      Python, TypeScript, Java, Go, Ruby, and Rust.
+      Trigger and manage SDK generation jobs for the six supported languages
+      Python, TypeScript, Java, Go, C#, and Rust, with optional GitHub Actions
+      and LLM coding-assistant rule files (Claude Code, Cursor, Gemini,
+      GitHub Copilot).
+  - name: MCP Generation
+    description: >-
+      Generate and manage Model Context Protocol (MCP) servers from an
+      OpenAPI specification so AI agents can call the API through structured
+      MCP tools.
   - name: Documentation
     description: >-
       Publish and manage API documentation sites generated from OpenAPI
-      specifications.
+      specifications, including on-brand themes, custom domains, and AI-ready
+      MCP documentation surfaces.
   - name: Mock Servers
     description: >-
       Deploy and manage mock server instances that simulate API behavior based
       on OpenAPI specs.
+  - name: Linting
+    description: >-
+      Lint OpenAPI specifications against Sideko's generation-readiness rules
+      and surface errors before SDK, MCP, or mock generation.
   - name: Authentication
     description: >-
       Manage API keys and authentication for the Sideko platform.
@@ -184,7 +202,7 @@ paths:
         Returns all versions of an API project. Each version corresponds to
         a distinct OpenAPI specification uploaded to the project.
       tags:
-        - API Projects
+        - API Versions
       parameters:
         - $ref: '#/components/parameters/projectId'
       responses:
@@ -204,9 +222,9 @@ paths:
       description: >-
         Uploads a new OpenAPI specification to create a new version of the API
         project. Accepts OpenAPI 3.0 and 3.1 specifications in JSON or YAML
-        format.
+        format and runs Sideko linting before accepting the version.
       tags:
-        - API Projects
+        - API Versions
       parameters:
         - $ref: '#/components/parameters/projectId'
       requestBody:
@@ -224,6 +242,73 @@ paths:
                 $ref: '#/components/schemas/ApiVersion'
         '400':
           description: Invalid OpenAPI specification
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+
+  /api-projects/{projectId}/versions/{versionId}/download:
+    get:
+      operationId: downloadApiVersionSpec
+      summary: Download API Version Spec
+      description: >-
+        Returns the raw OpenAPI specification (JSON or YAML) for a specific
+        API project version. Matches the CLI command `sideko api version
+        download`.
+      tags:
+        - API Versions
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/versionId'
+        - name: format
+          in: query
+          description: Preferred output format for the downloaded specification
+          schema:
+            type: string
+            enum:
+              - json
+              - yaml
+            default: yaml
+      responses:
+        '200':
+          description: OpenAPI specification returned successfully
+          content:
+            application/yaml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API version not found
+
+  /api-projects/{projectId}/lint:
+    post:
+      operationId: lintApiProject
+      summary: Lint API Project
+      description: >-
+        Runs Sideko's OpenAPI linting rules against a project version and
+        returns any blocking or advisory linting errors that would prevent
+        SDK, MCP, or mock generation.
+      tags:
+        - Linting
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LintRequest'
+      responses:
+        '200':
+          description: Lint result returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LintResult'
         '401':
           description: Invalid or missing API key
         '404':
@@ -306,6 +391,85 @@ paths:
           description: Invalid or missing API key
         '404':
           description: SDK generation job not found
+
+  /api-projects/{projectId}/mcps:
+    get:
+      operationId: listMcpGenerations
+      summary: List MCP Generations
+      description: >-
+        Returns all Model Context Protocol (MCP) server generation jobs for an
+        API project, including their status and download URLs when complete.
+      tags:
+        - MCP Generation
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of MCP generation jobs returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpGenerationList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: triggerMcpGeneration
+      summary: Trigger MCP Generation
+      description: >-
+        Initiates a Model Context Protocol (MCP) server generation job for the
+        specified API project version. The job produces an MCP server exposing
+        one tool per OpenAPI operation so AI agents (Claude, Cursor, ChatGPT,
+        Copilot) can call the API through structured MCP tools.
+      tags:
+        - MCP Generation
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerMcpRequest'
+      responses:
+        '202':
+          description: MCP generation job accepted and queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpGeneration'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+
+  /api-projects/{projectId}/mcps/{mcpId}:
+    get:
+      operationId: getMcpGeneration
+      summary: Get MCP Generation
+      description: >-
+        Returns the status and details of a specific MCP server generation job.
+        When the status is complete, a download URL is provided to retrieve the
+        generated MCP server archive.
+      tags:
+        - MCP Generation
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/mcpId'
+      responses:
+        '200':
+          description: MCP generation job details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpGeneration'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: MCP generation job not found
 
   /api-projects/{projectId}/docs:
     get:
@@ -524,6 +688,22 @@ components:
         type: string
         format: uuid
       description: Unique identifier of the SDK generation job
+    versionId:
+      name: versionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API version
+    mcpId:
+      name: mcpId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the MCP generation job
     serverId:
       name: serverId
       in: path
@@ -679,7 +859,7 @@ components:
             - typescript
             - java
             - go
-            - ruby
+            - csharp
             - rust
           description: Target programming language for the SDK
         status:
@@ -690,6 +870,19 @@ components:
             - complete
             - failed
           description: Current status of the generation job
+        ghActions:
+          type: boolean
+          description: Whether GitHub Actions for testing and publishing were generated alongside the SDK
+        llmCodingAssistants:
+          type: array
+          description: LLM coding-assistant rule files included with the SDK so agents can edit it safely
+          items:
+            type: string
+            enum:
+              - claude_code
+              - cursor
+              - gemini
+              - github_copilot
         downloadUrl:
           type: string
           format: uri
@@ -726,13 +919,27 @@ components:
             - typescript
             - java
             - go
-            - ruby
+            - csharp
             - rust
           description: Target programming language for the SDK
         versionId:
           type: string
           format: uuid
           description: ID of the API version to generate SDK from
+        ghActions:
+          type: boolean
+          default: false
+          description: Generate GitHub Actions for testing and publishing the SDK
+        llmCodingAssistants:
+          type: array
+          description: LLM coding-assistant rule files to include so agents can edit the SDK safely
+          items:
+            type: string
+            enum:
+              - claude_code
+              - cursor
+              - gemini
+              - github_copilot
 
     DocSite:
       type: object
@@ -871,3 +1078,126 @@ components:
         name:
           type: string
           description: Human-readable name for the API key
+
+    McpGeneration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the MCP generation job
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version used for generation
+        transport:
+          type: string
+          enum:
+            - stdio
+            - http
+            - sse
+          description: Transport the generated MCP server runs over
+        status:
+          type: string
+          enum:
+            - pending
+            - running
+            - complete
+            - failed
+          description: Current status of the MCP generation job
+        downloadUrl:
+          type: string
+          format: uri
+          description: URL to download the generated MCP server archive (available when complete)
+        toolCount:
+          type: integer
+          description: Number of MCP tools generated, one per OpenAPI operation
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the generation job was created
+        completedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the generation job completed
+
+    McpGenerationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpGeneration'
+        total:
+          type: integer
+
+    TriggerMcpRequest:
+      type: object
+      required:
+        - versionId
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to generate the MCP server from
+        transport:
+          type: string
+          enum:
+            - stdio
+            - http
+            - sse
+          default: stdio
+          description: Transport the generated MCP server should run over
+
+    LintRequest:
+      type: object
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: API version to lint (defaults to latest if omitted)
+        errorsOnly:
+          type: boolean
+          default: false
+          description: Return only blocking errors, omit advisory warnings
+
+    LintIssue:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Rule code that fired (e.g. sideko-sdk-language-enum)
+        severity:
+          type: string
+          enum:
+            - error
+            - warn
+            - hint
+          description: Severity of the lint finding
+        message:
+          type: string
+          description: Human-readable description of the lint finding
+        path:
+          type: string
+          description: JSON path or pointer to the offending location in the OpenAPI document
+
+    LintResult:
+      type: object
+      properties:
+        clean:
+          type: boolean
+          description: True when no blocking errors were found and the spec is generation-ready
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/LintIssue'
+        errorCount:
+          type: integer
+          description: Number of severity=error findings
+        warningCount:
+          type: integer
+          description: Number of severity=warn findings

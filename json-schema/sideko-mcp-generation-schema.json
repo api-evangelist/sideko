@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sideko/main/json-schema/sideko-mcp-generation-schema.json",
+  "title": "SidekoMcpGeneration",
+  "description": "An asynchronous job that produces a Model Context Protocol (MCP) server from an OpenAPI specification managed by Sideko. One MCP tool is generated per OpenAPI operation so AI agents (Claude, Cursor, ChatGPT, Copilot) can call the API through structured MCP tools.",
+  "type": "object",
+  "required": ["id", "projectId", "versionId", "transport", "status"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier of the MCP generation job"
+    },
+    "projectId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "ID of the parent API project"
+    },
+    "versionId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "ID of the API version used for generation"
+    },
+    "transport": {
+      "type": "string",
+      "enum": ["stdio", "http", "sse"],
+      "description": "Transport the generated MCP server runs over"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "complete", "failed"],
+      "description": "Current status of the MCP generation job"
+    },
+    "downloadUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to download the generated MCP server archive (available when complete)"
+    },
+    "toolCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of MCP tools generated, one per OpenAPI operation"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the generation job was created"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the generation job completed"
+    }
+  }
+}

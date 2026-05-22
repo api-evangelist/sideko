@@ -2,43 +2,65 @@ vocabulary:
   name: Sideko Platform Vocabulary
   description: >-
     Domain vocabulary and taxonomy for the Sideko API tooling platform, covering
-    API project management, SDK generation, documentation, and mock server concepts.
-  version: '1.0'
+    API project management, SDK generation, MCP server generation, documentation,
+    mock servers, OpenAPI linting, and the Hybrid Codegen + LLM coding-assistant
+    surfaces that ship alongside each generated artifact.
+  version: '1.1'
   created: '2026-05-02'
+  modified: '2026-05-22'
   provider: Sideko
 
 terms:
   - term: API Project
     definition: >-
       A container in the Sideko platform that holds one or more versioned OpenAPI
-      specifications and organizes the generated tooling (SDKs, docs, mock servers)
-      produced from those specifications.
+      specifications and organizes the generated tooling (SDKs, MCPs, docs, mock
+      servers) produced from those specifications.
     synonyms:
       - API definition
       - API specification project
     related:
       - API Version
       - SDK Generation
+      - MCP Generation
 
   - term: API Version
     definition: >-
       A specific revision of an OpenAPI specification uploaded to an API project.
-      Each version corresponds to a distinct OpenAPI 3.x document and may have
-      SDKs, documentation, and mock servers generated from it independently.
+      Each version corresponds to a distinct OpenAPI 3.0 or 3.1 document and may
+      have SDKs, MCP servers, documentation, and mock servers generated from it
+      independently. Versions support semantic versioning and version bumps
+      (auto/patch/minor/major/rc-*/release).
     synonyms:
       - spec version
       - API revision
 
   - term: SDK Generation
     definition: >-
-      An asynchronous job that transforms an OpenAPI specification into a
-      idiomatic client SDK for a target programming language. Sideko supports
-      generation for Python, TypeScript, Java, Go, Ruby, and Rust.
+      An asynchronous job that transforms an OpenAPI specification into an
+      idiomatic, deterministically generated client SDK for a target programming
+      language. Sideko supports six languages — Python, TypeScript, Java, Go,
+      C#, and Rust — and can optionally bundle GitHub Actions for testing and
+      publishing the SDK.
     synonyms:
       - code generation
       - client generation
     related:
       - API Version
+      - Hybrid Codegen
+
+  - term: MCP Generation
+    definition: >-
+      An asynchronous job that produces a Model Context Protocol (MCP) server
+      from an OpenAPI specification, exposing one MCP tool per API operation so
+      AI agents (Claude, Cursor, ChatGPT, Copilot) can call the API through
+      structured MCP tools. Supports stdio, HTTP, and SSE transports.
+    synonyms:
+      - MCP server generation
+      - Model Context Protocol server
+    related:
+      - SDK Generation
+      - Documentation Site
 
   - term: Mock Server
     definition: >-
@@ -53,12 +75,52 @@ terms:
   - term: Documentation Site
     definition: >-
       A hosted web portal automatically generated from an OpenAPI specification
-      that provides interactive API reference documentation, authentication guides,
-      code examples, and a try-it-now console for API consumers.
+      that provides interactive API reference documentation, authentication
+      guides, code examples, on-brand theming, custom domains, and an Automatic
+      MCP surface for AI integrations.
     synonyms:
       - API docs
       - developer portal
       - API reference
+
+  - term: Hybrid Codegen
+    definition: >-
+      Sideko's positioning for combining a deterministic OpenAPI-driven code
+      generator with guided AI customization, so SDKs are reliable by default
+      and workflows can be tailored in plain English without losing
+      regeneratability.
+    synonyms:
+      - deterministic-plus-AI codegen
+    related:
+      - SDK Generation
+
+  - term: LLM Coding Assistant Rules
+    definition: >-
+      Per-SDK rule files that ship alongside the generated SDK so an LLM coding
+      assistant — Claude Code, Cursor, Gemini, or GitHub Copilot — can edit and
+      extend the SDK safely without breaking regeneration.
+    synonyms:
+      - AI editor rules
+      - agent rules
+
+  - term: OpenAPI Linting
+    definition: >-
+      Sideko's spec-readiness check that runs against an OpenAPI document
+      before SDK, MCP, mock, or documentation generation. Errors block
+      generation by default and can be optionally overridden with
+      `--allow-lint-errors`.
+    synonyms:
+      - spec validation
+      - linting
+
+  - term: Service Account
+    definition: >-
+      A non-human Sideko identity, scoped per API/SDK/Docs surface, used to
+      authenticate the CLI or REST API from CI/CD pipelines via the
+      `SIDEKO_API_KEY` environment variable.
+    synonyms:
+      - CI credential
+      - automation account
 
   - term: Slug
     definition: >-
@@ -70,9 +132,11 @@ terms:
 
   - term: API Key
     definition: >-
-      A secret credential used to authenticate requests to the Sideko platform API.
-      Passed via the x-sideko-key HTTP header. Keys are shown in full only at
-      creation time and thereafter displayed in masked form.
+      A secret credential used to authenticate requests to the Sideko platform
+      API. Passed via the x-sideko-key HTTP header. Keys are shown in full only
+      at creation time and thereafter displayed in masked form. The CLI stores
+      keys in the OS-native secure store (macOS Keychain, Linux keyutils,
+      Windows Credential Manager).
     synonyms:
       - credentials
       - access key
@@ -81,8 +145,12 @@ terms:
 tags:
   - API Tooling
   - SDK Generation
+  - MCP Generation
   - Documentation
   - Mock Servers
+  - OpenAPI Linting
+  - Hybrid Codegen
+  - LLM Coding Assistants
   - Developer Experience
   - OpenAPI
   - Code Generation
