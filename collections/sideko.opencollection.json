@@ -1,0 +1,567 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sideko API",
+    "version": "1.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-sideko-key",
+      "value": "{{x-sideko-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API Projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of all API projects in the authenticated organization. Each project contains one or more API versions defined by OpenAPI specifications."
+        },
+        {
+          "info": {
+            "name": "Create API Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API project in the authenticated organization. The project will hold OpenAPI specifications and serve as the container for generated SDKs, documentation, and mock servers."
+        },
+        {
+          "info": {
+            "name": "Get API Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns the details of a specific API project by its unique identifier, including project metadata, versions, and associated tooling."
+        },
+        {
+          "info": {
+            "name": "Update API Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the metadata of an existing API project, including the project name, description, and configuration settings."
+        },
+        {
+          "info": {
+            "name": "Delete API Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Permanently deletes an API project and all associated versions, generated SDKs, documentation, and mock server configurations."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "API Versions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/versions",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all versions of an API project. Each version corresponds to a distinct OpenAPI specification uploaded to the project."
+        },
+        {
+          "info": {
+            "name": "Create API Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/versions",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Uploads a new OpenAPI specification to create a new version of the API project. Accepts OpenAPI 3.0 and 3.1 specifications in JSON or YAML format and runs Sideko linting before accepting the version."
+        },
+        {
+          "info": {
+            "name": "Download API Version Spec",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/versions/:versionId/download",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              },
+              {
+                "name": "versionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API version"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Preferred output format for the downloaded specification"
+              }
+            ]
+          },
+          "docs": "Returns the raw OpenAPI specification (JSON or YAML) for a specific API project version. Matches the CLI command `sideko api version download`."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Linting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lint API Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/lint",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Runs Sideko's OpenAPI linting rules against a project version and returns any blocking or advisory linting errors that would prevent SDK, MCP, or mock generation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "SDK Generation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List SDK Generations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/sdks",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all SDK generation jobs for an API project across all target languages, including their status and download URLs when complete."
+        },
+        {
+          "info": {
+            "name": "Trigger SDK Generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/sdks",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates an SDK generation job for the specified API project version and target programming language. The job runs asynchronously and the resulting SDK can be downloaded when the status is complete."
+        },
+        {
+          "info": {
+            "name": "Get SDK Generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/sdks/:sdkId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              },
+              {
+                "name": "sdkId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the SDK generation job"
+              }
+            ]
+          },
+          "docs": "Returns the status and details of a specific SDK generation job. When the status is complete, a download URL is provided to retrieve the generated SDK archive."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "MCP Generation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List MCP Generations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mcps",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all Model Context Protocol (MCP) server generation jobs for an API project, including their status and download URLs when complete."
+        },
+        {
+          "info": {
+            "name": "Trigger MCP Generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mcps",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a Model Context Protocol (MCP) server generation job for the specified API project version. The job produces an MCP server exposing one tool per OpenAPI operation so AI agents (Claude, Cursor, ChatGPT, Copilot) can call the API through structured MCP tools."
+        },
+        {
+          "info": {
+            "name": "Get MCP Generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mcps/:mcpId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              },
+              {
+                "name": "mcpId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the MCP generation job"
+              }
+            ]
+          },
+          "docs": "Returns the status and details of a specific MCP server generation job. When the status is complete, a download URL is provided to retrieve the generated MCP server archive."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Documentation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Documentation Sites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/docs",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all documentation sites deployed for the API project, including their deployment status, URLs, and configuration."
+        },
+        {
+          "info": {
+            "name": "Deploy Documentation Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/docs",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys or updates an API documentation site for the specified project version. Sideko generates and hosts a fully-featured documentation portal with interactive examples, authentication guides, and API reference pages."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Mock Servers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Mock Servers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mock-servers",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all mock server instances deployed for the API project, including their status, endpoint URLs, and configuration."
+        },
+        {
+          "info": {
+            "name": "Deploy Mock Server",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mock-servers",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys a mock server for the specified API project version. The mock server automatically generates realistic responses based on the OpenAPI specification schemas and examples."
+        },
+        {
+          "info": {
+            "name": "Delete Mock Server",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mock-servers/:serverId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              },
+              {
+                "name": "serverId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the mock server"
+              }
+            ]
+          },
+          "docs": "Permanently shuts down and removes a mock server instance. All traffic to the mock server endpoint will fail after deletion."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/auth/api-keys"
+          },
+          "docs": "Returns all API keys for the authenticated organization, including their names, scopes, and creation timestamps. Key values are masked for security."
+        },
+        {
+          "info": {
+            "name": "Create API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/auth/api-keys",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key for the authenticated organization. The full key value is only returned once at creation time and cannot be retrieved again."
+        },
+        {
+          "info": {
+            "name": "Delete API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sideko.dev/v1/auth/api-keys/:keyId",
+            "params": [
+              {
+                "name": "keyId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API key"
+              }
+            ]
+          },
+          "docs": "Permanently revokes and deletes an API key. Any requests using the deleted key will be rejected immediately."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

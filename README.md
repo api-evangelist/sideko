@@ -2,17 +2,26 @@
 
 Sideko is an API tooling generation platform that turns an OpenAPI specification into a complete developer-tooling suite — SDKs in six languages (Python, TypeScript, Java, Go, C#, Rust), Model Context Protocol (MCP) servers for AI agents, on-brand documentation sites with an Automatic MCP surface, mock servers, and CLI tooling — without writing generation code. The platform's "Hybrid Codegen" pairs deterministic OpenAPI-driven generation with guided AI customization, and ships LLM coding-assistant rule files (Claude Code, Cursor, Gemini, GitHub Copilot) alongside each SDK so agents can extend the generated code without breaking regeneration. Customers include Prudential Financial and Magic Hour AI; Sideko's published Stripe SDK benchmark generated over one million lines of SDK code in under sixty seconds.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/sideko/refs/heads/main/apis.yml)
+**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/sideko/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/sideko/refs/heads/main/apis.yml)
 
 ## Scope
 
-- **Type:** Contract
 - **Position:** Consuming
 - **Access:** 3rd-Party
 
 ## Tags
 
-CLI, Documentation, Mock Servers, Platform, SDKs, API Tooling, SDK Generation, MCP Generation, AI, Hybrid Codegen, OpenAPI Linting
+- CLI
+- Documentation
+- Mock Servers
+- Platform
+- SDKs
+- API Tooling
+- SDK Generation
+- MCP Generation
+- AI
+- Hybrid Codegen
+- OpenAPI Linting
 
 ## Timestamps
 
@@ -23,124 +32,251 @@ CLI, Documentation, Mock Servers, Platform, SDKs, API Tooling, SDK Generation, M
 
 ### Sideko API
 
-The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages (Python, TypeScript, Java, Go, C#, Rust), generate Model Context Protocol (MCP) servers from OpenAPI, lint specifications for generation-readiness, deploy mock servers, and publish on-brand API documentation sites.
+The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages (Python, TypeScript, Java, Go, C#, Rust), generate Model Context Protocol (MCP) servers from OpenAPI, lint specifications for generation-readiness, deploy mock servers, and publish on-brand API documentation sites. The API powers Sideko's "Hybrid Codegen" pipeline (deterministic generation plus guided AI customization) and ships LLM coding-assistant rules for Claude Code, Cursor, Gemini, and GitHub Copilot alongside each SDK.
 
-**Human URL:** [https://docs.sideko.dev/](https://docs.sideko.dev/)
+- **Human URL:** [https://docs.sideko.dev/](https://docs.sideko.dev/)
+- **Base URL:** `https://api.sideko.dev/v1`
 
-**Base URL:** https://api.sideko.dev/v1
+#### Tags
 
-**Tags:** API Tooling, SDK Generation, MCP Generation, Documentation, Mock Servers, OpenAPI Linting, Platform
+- API Tooling
+- SDK Generation
+- MCP Generation
+- Documentation
+- Mock Servers
+- OpenAPI Linting
+- Platform
 
 #### Properties
 
 - [Documentation](https://docs.sideko.dev/)
-- [OpenAPI](openapi/sideko-openapi.yml)
+- [OpenAPI](openapi/sideko-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 - [Spectral Rules](rules/sideko-rules.yml)
-- [Capabilities (workflow)](capabilities/api-tooling-lifecycle.yaml)
-- [JSON Schema — API Project](json-schema/sideko-api-project-schema.json)
-- [JSON Schema — SDK Generation](json-schema/sideko-sdk-generation-schema.json)
-- [JSON Schema — MCP Generation](json-schema/sideko-mcp-generation-schema.json)
-- [JSON Structure — API Project](json-structure/sideko-api-project-structure.json)
-- [JSON-LD Context](json-ld/sideko-context.jsonld)
+- [Capabilities](capabilities/api-tooling-lifecycle.yaml)
+- [JSON Schema](json-schema/sideko-api-project-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Schema](json-schema/sideko-sdk-generation-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Schema](json-schema/sideko-mcp-generation-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Structure](json-structure/sideko-api-project-structure.json)
+- [JSON-LD](json-ld/sideko-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
 - [Vocabulary](vocabulary/sideko-vocabulary.yml)
-- [Plans & Pricing](plans/sideko-plans-pricing.yml)
+- [Plans](plans/sideko-plans-pricing.yml)
 - [Rate Limits](rate-limits/sideko-rate-limits.yml)
-- [FinOps](finops/sideko-finops.yml)
+- [Fin Ops](finops/sideko-finops.yml)
+- [Example](examples/sideko-list-api-projects-example.json)
+- [Example](examples/sideko-trigger-sdk-generation-example.json)
+- [Example](examples/sideko-trigger-mcp-generation-example.json)
+- [Example](examples/sideko-deploy-mock-server-example.json)
+- [Sign Up](https://authentication.sideko.dev/sign-up)
+- [Pricing](https://sideko.dev/pricing)
+- [Git Hub](https://github.com/Sideko-Inc/sideko)
 
 ### Sideko CLI
 
-The Sideko CLI is a Rust binary (current release v1.6.3, Aug 2025) with five resource groups — `sideko api`, `sideko sdk`, `sideko doc`, `sideko account`, `sideko config` — including SDK generation for Python, TypeScript, Java, Go, C#, and Rust with optional GitHub Actions and LLM coding-assistant rules (Claude Code, Cursor, Gemini, GitHub Copilot). Installs via Homebrew, pip, npm, or curl.
+The Sideko CLI is a Rust binary (current release v1.6.3, Aug 2025) that provides command-line access to the Sideko platform. Commands are organized into five resource groups — `sideko api` (create, version, lint, stats, download specs), `sideko sdk` (init, config, create, update, released for Python, TypeScript, Java, Go, C#, Rust, with optional GitHub Actions and LLM coding-assistant rule files for Claude Code, Cursor, Gemini, and GitHub Copilot), `sideko doc` (list, deploy), `sideko account`, and `sideko config`. Installs via Homebrew, pip, npm, or curl, and stores credentials in the OS-native secure store.
 
-**Human URL:** [https://github.com/Sideko-Inc/sideko](https://github.com/Sideko-Inc/sideko)
+- **Human URL:** [https://github.com/Sideko-Inc/sideko](https://github.com/Sideko-Inc/sideko)
 
-**Tags:** CLI, Developer Tools, SDKs, MCP, OpenAPI Linting
+#### Tags
+
+- CLI
+- Developer Tools
+- SDKs
+- MCP
+- OpenAPI Linting
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/sideko)
+- [Documentation](https://docs.sideko.dev/)
+- [C L I Reference](https://github.com/Sideko-Inc/sideko/blob/main/docs/CLI.md)
+- [Releases](https://github.com/Sideko-Inc/sideko/releases)
+- [Install Script](https://github.com/Sideko-Inc/sideko/blob/main/install.sh)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
 ### Sideko SDK Update Action
 
-GitHub Action that keeps Sideko-generated SDKs in sync with their parent API by running `sideko sdk update` in CI and opening a versioned PR with the regenerated code.
+GitHub Action that keeps Sideko-generated SDKs up to date with their parent API. Runs `sideko sdk update` in CI, opens a versioned PR with the regenerated SDK, and preserves any custom files and LLM-coding-assistant rules. Repo is TypeScript, last updated March 2026.
 
-**Human URL:** [https://github.com/Sideko-Inc/sdk-update](https://github.com/Sideko-Inc/sdk-update)
+- **Human URL:** [https://github.com/Sideko-Inc/sdk-update](https://github.com/Sideko-Inc/sdk-update)
+
+#### Tags
+
+- GitHub Action
+- SDK Maintenance
+- CI/CD
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/sdk-update)
+- [Git Hub Action](https://github.com/marketplace/actions/sideko-sdk-update)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
 ### Sideko Node.js SDK
 
-The Sideko Node.js SDK provides TypeScript and JavaScript bindings for the Sideko API.
+The Sideko Node.js SDK provides TypeScript and JavaScript bindings for the Sideko API. Generated by Sideko's own pipeline from the Sideko OpenAPI specification.
 
-**Human URL:** [https://github.com/Sideko-Inc/sideko-node-sdk](https://github.com/Sideko-Inc/sideko-node-sdk)
+- **Human URL:** [https://github.com/Sideko-Inc/sideko-node-sdk](https://github.com/Sideko-Inc/sideko-node-sdk)
+
+#### Tags
+
+- SDK
+- Node.js
+- TypeScript
+- JavaScript
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/sideko-node-sdk)
+- [SDK](https://www.npmjs.com/package/sideko-sdk)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
 ### Sideko Python SDK
 
-The Sideko Python SDK provides Python bindings for the Sideko API.
+The Sideko Python SDK provides Python bindings for the Sideko API. Generated by Sideko's own pipeline from the Sideko OpenAPI specification.
 
-**Human URL:** [https://github.com/Sideko-Inc/sideko-python-sdk](https://github.com/Sideko-Inc/sideko-python-sdk)
+- **Human URL:** [https://github.com/Sideko-Inc/sideko-python-sdk](https://github.com/Sideko-Inc/sideko-python-sdk)
+
+#### Tags
+
+- SDK
+- Python
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/sideko-python-sdk)
+- [SDK](https://pypi.org/project/sideko-sdk/)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
 ### Sideko Stripe TypeScript SDK (Sample)
 
-Sample TypeScript SDK for the Stripe REST API, Sideko-generated as the benchmark behind the "Stripe API Challenge" blog post (over 1 million lines of SDK code generated in under 60 seconds) and the reference used in Code Mode MCP benchmarks.
+Sample TypeScript SDK for the Stripe REST API, Sideko-generated as the benchmark behind the "Stripe API Challenge" blog post (over 1 million lines of SDK code generated in under 60 seconds). Demonstrates Sideko's scale and is the reference used in the Code Mode MCP benchmarks against raw MCP and CLI on 12 Stripe tasks.
 
-**Human URL:** [https://github.com/Sideko-Inc/sideko-stripe-typescript](https://github.com/Sideko-Inc/sideko-stripe-typescript)
+- **Human URL:** [https://github.com/Sideko-Inc/sideko-stripe-typescript](https://github.com/Sideko-Inc/sideko-stripe-typescript)
+
+#### Tags
+
+- SDK
+- Sample
+- Stripe
+- TypeScript
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/sideko-stripe-typescript)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
 ### Sideko Stripe Python SDK (Sample)
 
 Sample Python SDK for the Stripe API, Sideko-generated as a companion to the TypeScript Stripe sample.
 
-**Human URL:** [https://github.com/Sideko-Inc/sideko-stripe-python](https://github.com/Sideko-Inc/sideko-stripe-python)
+- **Human URL:** [https://github.com/Sideko-Inc/sideko-stripe-python](https://github.com/Sideko-Inc/sideko-stripe-python)
 
-### make-request-py & make-request-js (Sideko Runtimes)
+#### Tags
 
-The HTTP-client runtimes used by Sideko-generated SDKs.
+- SDK
+- Sample
+- Stripe
+- Python
 
-- [make-request-py](https://github.com/Sideko-Inc/make-request-py)
-- [make-request-js](https://github.com/Sideko-Inc/make-request-js)
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/sideko-stripe-python)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+
+### make-request-py (Sideko Runtime)
+
+Modern Python HTTP client library with built-in authentication and response handling, used as the runtime by Sideko-generated Python SDKs.
+
+- **Human URL:** [https://github.com/Sideko-Inc/make-request-py](https://github.com/Sideko-Inc/make-request-py)
+
+#### Tags
+
+- HTTP Client
+- Runtime
+- Python
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/make-request-py)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+
+### make-request-js (Sideko Runtime)
+
+Modern TypeScript HTTP client for browser and Node.js environments, used as the runtime by Sideko-generated TypeScript SDKs.
+
+- **Human URL:** [https://github.com/Sideko-Inc/make-request-js](https://github.com/Sideko-Inc/make-request-js)
+
+#### Tags
+
+- HTTP Client
+- Runtime
+- TypeScript
+- JavaScript
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/make-request-js)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
 ### Sideko SDK Reference
 
-Boilerplate code and example SDKs that Sideko uses to generate target-language SDKs.
+Boilerplate code used by Sideko to generate SDKs, including example SDKs that demonstrate the generated surface across supported languages.
 
-**Human URL:** [https://github.com/Sideko-Inc/sdk-reference](https://github.com/Sideko-Inc/sdk-reference)
+- **Human URL:** [https://github.com/Sideko-Inc/sdk-reference](https://github.com/Sideko-Inc/sdk-reference)
+
+#### Tags
+
+- Boilerplate
+- SDK
+- Reference
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/sdk-reference)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
 ### Sideko Homebrew Tap
 
-Homebrew tap publishing the `sideko` CLI (`brew install sideko-inc/tap/sideko`).
+Homebrew tap that publishes the `sideko` CLI binary (`brew install sideko-inc/tap/sideko`).
 
-**Human URL:** [https://github.com/Sideko-Inc/homebrew-tap](https://github.com/Sideko-Inc/homebrew-tap)
+- **Human URL:** [https://github.com/Sideko-Inc/homebrew-tap](https://github.com/Sideko-Inc/homebrew-tap)
+
+#### Tags
+
+- Distribution
+- Homebrew
+
+#### Properties
+
+- [Git Hub](https://github.com/Sideko-Inc/homebrew-tap)
+- [Postman Collection](collections/sideko.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/sideko.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
 ## Common Properties
 
+- [LinkedIn](https://www.linkedin.com/company/sideko)
 - [Website](https://www.sideko.dev/)
 - [Documentation](https://docs.sideko.dev/)
 - [Sign Up](https://authentication.sideko.dev/sign-up)
 - [Pricing](https://sideko.dev/pricing)
-- [Blog & Resources](https://sideko.dev/resources)
-- [GitHub Org](https://github.com/Sideko-Inc)
-- [ChangeLog](https://docs.sideko.dev/changelog/)
+- [Blog](https://sideko.dev/resources)
+- [Git Hub](https://github.com/Sideko-Inc)
+- [Changelog](https://docs.sideko.dev/changelog/)
 - [Terms of Service](https://www.sideko.dev/legal/terms)
 - [Privacy Policy](https://www.sideko.dev/legal/privacy)
-
-## Capabilities
-
-### Workflow Capabilities
-
-- [API Tooling Lifecycle](capabilities/api-tooling-lifecycle.yaml) — Unified workflow that ingests an OpenAPI version, lints it, generates SDKs and an MCP server, deploys mocks, and publishes documentation.
-
-### Per-API Capabilities
-
-- [API Projects](capabilities/sideko-api-projects.yaml)
-- [Authentication](capabilities/sideko-authentication.yaml)
-- [SDK Generation](capabilities/sideko-sdk-generation.yaml)
-- [MCP Generation](capabilities/sideko-mcp-generation.yaml)
-- [Documentation](capabilities/sideko-documentation.yaml)
-- [Mock Servers](capabilities/sideko-mock-servers.yaml)
-- [OpenAPI Linting](capabilities/sideko-linting.yaml)
-
-## Examples
-
-- [List API Projects](examples/sideko-list-api-projects-example.json)
-- [Trigger SDK Generation](examples/sideko-trigger-sdk-generation-example.json)
-- [Trigger MCP Generation](examples/sideko-trigger-mcp-generation-example.json)
-- [Deploy Mock Server](examples/sideko-deploy-mock-server-example.json)
 
 ## Maintainers
 
 **FN:** Kin Lane
-
 **Email:** kin@apievangelist.com
