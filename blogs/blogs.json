@@ -2,13 +2,19 @@
   "repo": "sideko",
   "feeds": [
     {
-      "source": "https://sideko.dev/pricing",
-      "feed_url": "https://sideko.dev/pricing",
-      "title": "",
+      "source": "https://sideko.dev/resources",
+      "feed_url": "",
       "saved": 0,
-      "method": "none"
+      "method": "agent-scrape"
+    },
+    {
+      "source": "https://sideko.dev/pricing",
+      "feed_url": "",
+      "saved": 0,
+      "method": "agent-scrape"
     }
   ],
-  "fetched": "2026-06-14T20:42:17Z",
-  "post_count": 0
+  "fetched": "2026-06-27T13:10:00Z",
+  "post_count": 0,
+  "agent_pulled": "2026-06-27"
 }
