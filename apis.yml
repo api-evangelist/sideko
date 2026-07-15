@@ -248,6 +248,8 @@ description: >-
   Magic Hour AI; Sideko's published Stripe SDK benchmark generated over one million lines of SDK code in under sixty
   seconds.
 common:
+  - type: AgenticAccess
+    url: agentic-access/sideko-agentic-access.yml
   - type: DomainSecurity
     url: security/sideko-domain-security.yml
   - type: Authentication
