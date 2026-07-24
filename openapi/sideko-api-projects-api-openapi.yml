@@ -1,0 +1,222 @@
+openapi: 3.1.0
+info:
+  title: Sideko API Projects API
+  description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+servers:
+- url: https://api.sideko.dev/v1
+  description: Sideko Production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: API Projects
+  description: Manage API projects within the Sideko platform. Projects organize OpenAPI specifications and the tooling generated from them.
+paths:
+  /api-projects:
+    get:
+      operationId: listApiProjects
+      summary: List API Projects
+      description: Returns a paginated list of all API projects in the authenticated organization. Each project contains one or more API versions defined by OpenAPI specifications.
+      tags:
+      - API Projects
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+        description: Page number for pagination
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 20
+          maximum: 100
+        description: Number of results per page
+      responses:
+        '200':
+          description: List of API projects returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiProjectList'
+        '401':
+          description: Invalid or missing API key
+    post:
+      operationId: createApiProject
+      summary: Create API Project
+      description: Creates a new API project in the authenticated organization. The project will hold OpenAPI specifications and serve as the container for generated SDKs, documentation, and mock servers.
+      tags:
+      - API Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiProjectRequest'
+      responses:
+        '201':
+          description: API project created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiProject'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '409':
+          description: Project with this name already exists
+  /api-projects/{projectId}:
+    get:
+      operationId: getApiProject
+      summary: Get API Project
+      description: Returns the details of a specific API project by its unique identifier, including project metadata, versions, and associated tooling.
+      tags:
+      - API Projects
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: API project details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiProject'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    put:
+      operationId: updateApiProject
+      summary: Update API Project
+      description: Updates the metadata of an existing API project, including the project name, description, and configuration settings.
+      tags:
+      - API Projects
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApiProjectRequest'
+      responses:
+        '200':
+          description: API project updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiProject'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    delete:
+      operationId: deleteApiProject
+      summary: Delete API Project
+      description: Permanently deletes an API project and all associated versions, generated SDKs, documentation, and mock server configurations.
+      tags:
+      - API Projects
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      responses:
+        '204':
+          description: API project deleted successfully
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+components:
+  schemas:
+    ApiProjectList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiProject'
+        total:
+          type: integer
+          description: Total number of projects
+        page:
+          type: integer
+          description: Current page number
+        limit:
+          type: integer
+          description: Number of results per page
+    CreateApiProjectRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Name for the API project
+        description:
+          type: string
+          description: Optional description of the API
+    ApiProject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the project
+        name:
+          type: string
+          description: Human-readable name of the API project
+        description:
+          type: string
+          description: Description of the API and its purpose
+        slug:
+          type: string
+          description: URL-safe identifier for the project
+        versionCount:
+          type: integer
+          description: Number of API versions in this project
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the project was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the project was last updated
+    UpdateApiProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New name for the API project
+        description:
+          type: string
+          description: Updated description of the API
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/

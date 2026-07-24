@@ -1,0 +1,219 @@
+openapi: 3.1.0
+info:
+  title: Sideko API Projects SDK Generation API
+  description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+servers:
+- url: https://api.sideko.dev/v1
+  description: Sideko Production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: SDK Generation
+  description: Trigger and manage SDK generation jobs for the six supported languages Python, TypeScript, Java, Go, C#, and Rust, with optional GitHub Actions and LLM coding-assistant rule files (Claude Code, Cursor, Gemini, GitHub Copilot).
+paths:
+  /api-projects/{projectId}/sdks:
+    get:
+      operationId: listSdkGenerations
+      summary: List SDK Generations
+      description: Returns all SDK generation jobs for an API project across all target languages, including their status and download URLs when complete.
+      tags:
+      - SDK Generation
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of SDK generation jobs returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGenerationList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: triggerSdkGeneration
+      summary: Trigger SDK Generation
+      description: Initiates an SDK generation job for the specified API project version and target programming language. The job runs asynchronously and the resulting SDK can be downloaded when the status is complete.
+      tags:
+      - SDK Generation
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerSdkRequest'
+      responses:
+        '202':
+          description: SDK generation job accepted and queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGeneration'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+  /api-projects/{projectId}/sdks/{sdkId}:
+    get:
+      operationId: getSdkGeneration
+      summary: Get SDK Generation
+      description: Returns the status and details of a specific SDK generation job. When the status is complete, a download URL is provided to retrieve the generated SDK archive.
+      tags:
+      - SDK Generation
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/sdkId'
+      responses:
+        '200':
+          description: SDK generation job details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGeneration'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: SDK generation job not found
+components:
+  schemas:
+    SdkGeneration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the SDK generation job
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version used for generation
+        language:
+          type: string
+          enum:
+          - python
+          - typescript
+          - java
+          - go
+          - csharp
+          - rust
+          description: Target programming language for the SDK
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - complete
+          - failed
+          description: Current status of the generation job
+        ghActions:
+          type: boolean
+          description: Whether GitHub Actions for testing and publishing were generated alongside the SDK
+        llmCodingAssistants:
+          type: array
+          description: LLM coding-assistant rule files included with the SDK so agents can edit it safely
+          items:
+            type: string
+            enum:
+            - claude_code
+            - cursor
+            - gemini
+            - github_copilot
+        downloadUrl:
+          type: string
+          format: uri
+          description: URL to download the generated SDK archive (available when complete)
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the generation job was created
+        completedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the generation job completed
+    TriggerSdkRequest:
+      type: object
+      required:
+      - language
+      - versionId
+      properties:
+        language:
+          type: string
+          enum:
+          - python
+          - typescript
+          - java
+          - go
+          - csharp
+          - rust
+          description: Target programming language for the SDK
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to generate SDK from
+        ghActions:
+          type: boolean
+          default: false
+          description: Generate GitHub Actions for testing and publishing the SDK
+        llmCodingAssistants:
+          type: array
+          description: LLM coding-assistant rule files to include so agents can edit the SDK safely
+          items:
+            type: string
+            enum:
+            - claude_code
+            - cursor
+            - gemini
+            - github_copilot
+    SdkGenerationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SdkGeneration'
+        total:
+          type: integer
+  parameters:
+    sdkId:
+      name: sdkId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the SDK generation job
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/

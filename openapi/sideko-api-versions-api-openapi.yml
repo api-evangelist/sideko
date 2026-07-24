@@ -1,0 +1,175 @@
+openapi: 3.1.0
+info:
+  title: Sideko API Projects API Versions API
+  description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+servers:
+- url: https://api.sideko.dev/v1
+  description: Sideko Production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: API Versions
+  description: Manage versioned OpenAPI specifications inside an API project. Each version is the source of truth that drives SDK, MCP, mock-server, and documentation generation.
+paths:
+  /api-projects/{projectId}/versions:
+    get:
+      operationId: listApiVersions
+      summary: List API Versions
+      description: Returns all versions of an API project. Each version corresponds to a distinct OpenAPI specification uploaded to the project.
+      tags:
+      - API Versions
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of API versions returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiVersionList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: createApiVersion
+      summary: Create API Version
+      description: Uploads a new OpenAPI specification to create a new version of the API project. Accepts OpenAPI 3.0 and 3.1 specifications in JSON or YAML format and runs Sideko linting before accepting the version.
+      tags:
+      - API Versions
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateApiVersionRequest'
+      responses:
+        '201':
+          description: API version created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiVersion'
+        '400':
+          description: Invalid OpenAPI specification
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+  /api-projects/{projectId}/versions/{versionId}/download:
+    get:
+      operationId: downloadApiVersionSpec
+      summary: Download API Version Spec
+      description: Returns the raw OpenAPI specification (JSON or YAML) for a specific API project version. Matches the CLI command `sideko api version download`.
+      tags:
+      - API Versions
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/versionId'
+      - name: format
+        in: query
+        description: Preferred output format for the downloaded specification
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+          default: yaml
+      responses:
+        '200':
+          description: OpenAPI specification returned successfully
+          content:
+            application/yaml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API version not found
+components:
+  schemas:
+    CreateApiVersionRequest:
+      type: object
+      required:
+      - spec
+      properties:
+        spec:
+          type: string
+          format: binary
+          description: OpenAPI specification file (JSON or YAML)
+        version:
+          type: string
+          description: Override the version from the spec info.version field
+    ApiVersionList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiVersion'
+        total:
+          type: integer
+    ApiVersion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the API version
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        version:
+          type: string
+          description: Version string from the OpenAPI spec info.version
+        specFormat:
+          type: string
+          enum:
+          - openapi3_0
+          - openapi3_1
+          description: OpenAPI specification format version
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the version was created
+  parameters:
+    versionId:
+      name: versionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API version
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/

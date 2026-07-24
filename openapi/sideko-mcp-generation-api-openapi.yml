@@ -1,0 +1,189 @@
+openapi: 3.1.0
+info:
+  title: Sideko API Projects MCP Generation API
+  description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+servers:
+- url: https://api.sideko.dev/v1
+  description: Sideko Production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: MCP Generation
+  description: Generate and manage Model Context Protocol (MCP) servers from an OpenAPI specification so AI agents can call the API through structured MCP tools.
+paths:
+  /api-projects/{projectId}/mcps:
+    get:
+      operationId: listMcpGenerations
+      summary: List MCP Generations
+      description: Returns all Model Context Protocol (MCP) server generation jobs for an API project, including their status and download URLs when complete.
+      tags:
+      - MCP Generation
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of MCP generation jobs returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpGenerationList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: triggerMcpGeneration
+      summary: Trigger MCP Generation
+      description: Initiates a Model Context Protocol (MCP) server generation job for the specified API project version. The job produces an MCP server exposing one tool per OpenAPI operation so AI agents (Claude, Cursor, ChatGPT, Copilot) can call the API through structured MCP tools.
+      tags:
+      - MCP Generation
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerMcpRequest'
+      responses:
+        '202':
+          description: MCP generation job accepted and queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpGeneration'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+  /api-projects/{projectId}/mcps/{mcpId}:
+    get:
+      operationId: getMcpGeneration
+      summary: Get MCP Generation
+      description: Returns the status and details of a specific MCP server generation job. When the status is complete, a download URL is provided to retrieve the generated MCP server archive.
+      tags:
+      - MCP Generation
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/mcpId'
+      responses:
+        '200':
+          description: MCP generation job details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpGeneration'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: MCP generation job not found
+components:
+  parameters:
+    mcpId:
+      name: mcpId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the MCP generation job
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+  schemas:
+    McpGenerationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpGeneration'
+        total:
+          type: integer
+    McpGeneration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the MCP generation job
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version used for generation
+        transport:
+          type: string
+          enum:
+          - stdio
+          - http
+          - sse
+          description: Transport the generated MCP server runs over
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - complete
+          - failed
+          description: Current status of the MCP generation job
+        downloadUrl:
+          type: string
+          format: uri
+          description: URL to download the generated MCP server archive (available when complete)
+        toolCount:
+          type: integer
+          description: Number of MCP tools generated, one per OpenAPI operation
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the generation job was created
+        completedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the generation job completed
+    TriggerMcpRequest:
+      type: object
+      required:
+      - versionId
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to generate the MCP server from
+        transport:
+          type: string
+          enum:
+          - stdio
+          - http
+          - sse
+          default: stdio
+          description: Transport the generated MCP server should run over
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/

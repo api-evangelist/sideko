@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  title: Sideko API Projects Mock Servers API
+  description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+servers:
+- url: https://api.sideko.dev/v1
+  description: Sideko Production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Mock Servers
+  description: Deploy and manage mock server instances that simulate API behavior based on OpenAPI specs.
+paths:
+  /api-projects/{projectId}/mock-servers:
+    get:
+      operationId: listMockServers
+      summary: List Mock Servers
+      description: Returns all mock server instances deployed for the API project, including their status, endpoint URLs, and configuration.
+      tags:
+      - Mock Servers
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of mock servers returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MockServerList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: deployMockServer
+      summary: Deploy Mock Server
+      description: Deploys a mock server for the specified API project version. The mock server automatically generates realistic responses based on the OpenAPI specification schemas and examples.
+      tags:
+      - Mock Servers
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployMockServerRequest'
+      responses:
+        '202':
+          description: Mock server deployment initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MockServer'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+  /api-projects/{projectId}/mock-servers/{serverId}:
+    delete:
+      operationId: deleteMockServer
+      summary: Delete Mock Server
+      description: Permanently shuts down and removes a mock server instance. All traffic to the mock server endpoint will fail after deletion.
+      tags:
+      - Mock Servers
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/serverId'
+      responses:
+        '204':
+          description: Mock server deleted successfully
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: Mock server not found
+components:
+  schemas:
+    DeployMockServerRequest:
+      type: object
+      required:
+      - versionId
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to deploy mock server for
+    MockServer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the mock server
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        endpoint:
+          type: string
+          format: uri
+          description: Public endpoint URL of the mock server
+        status:
+          type: string
+          enum:
+          - deploying
+          - running
+          - stopped
+          - failed
+          description: Current status of the mock server
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the mock server was deployed
+    MockServerList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MockServer'
+  parameters:
+    serverId:
+      name: serverId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the mock server
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/

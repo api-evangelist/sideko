@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: Sideko API Projects Documentation API
+  description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+servers:
+- url: https://api.sideko.dev/v1
+  description: Sideko Production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Documentation
+  description: Publish and manage API documentation sites generated from OpenAPI specifications, including on-brand themes, custom domains, and AI-ready MCP documentation surfaces.
+paths:
+  /api-projects/{projectId}/docs:
+    get:
+      operationId: listDocumentationSites
+      summary: List Documentation Sites
+      description: Returns all documentation sites deployed for the API project, including their deployment status, URLs, and configuration.
+      tags:
+      - Documentation
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: List of documentation sites returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocSiteList'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+    post:
+      operationId: deployDocumentationSite
+      summary: Deploy Documentation Site
+      description: Deploys or updates an API documentation site for the specified project version. Sideko generates and hosts a fully-featured documentation portal with interactive examples, authentication guides, and API reference pages.
+      tags:
+      - Documentation
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployDocSiteRequest'
+      responses:
+        '202':
+          description: Documentation site deployment initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocSite'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+components:
+  schemas:
+    DocSite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the documentation site
+        projectId:
+          type: string
+          format: uuid
+          description: ID of the parent API project
+        url:
+          type: string
+          format: uri
+          description: Public URL of the documentation site
+        status:
+          type: string
+          enum:
+          - deploying
+          - live
+          - failed
+          description: Current deployment status
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the site was first deployed
+    DocSiteList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocSite'
+    DeployDocSiteRequest:
+      type: object
+      required:
+      - versionId
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to deploy documentation for
+        customDomain:
+          type: string
+          description: Optional custom domain for the documentation site
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/

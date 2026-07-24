@@ -1,0 +1,114 @@
+openapi: 3.1.0
+info:
+  title: Sideko API Projects Linting API
+  description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+servers:
+- url: https://api.sideko.dev/v1
+  description: Sideko Production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Linting
+  description: Lint OpenAPI specifications against Sideko's generation-readiness rules and surface errors before SDK, MCP, or mock generation.
+paths:
+  /api-projects/{projectId}/lint:
+    post:
+      operationId: lintApiProject
+      summary: Lint API Project
+      description: Runs Sideko's OpenAPI linting rules against a project version and returns any blocking or advisory linting errors that would prevent SDK, MCP, or mock generation.
+      tags:
+      - Linting
+      parameters:
+      - $ref: '#/components/parameters/projectId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LintRequest'
+      responses:
+        '200':
+          description: Lint result returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LintResult'
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API project not found
+components:
+  schemas:
+    LintResult:
+      type: object
+      properties:
+        clean:
+          type: boolean
+          description: True when no blocking errors were found and the spec is generation-ready
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/LintIssue'
+        errorCount:
+          type: integer
+          description: Number of severity=error findings
+        warningCount:
+          type: integer
+          description: Number of severity=warn findings
+    LintRequest:
+      type: object
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: API version to lint (defaults to latest if omitted)
+        errorsOnly:
+          type: boolean
+          default: false
+          description: Return only blocking errors, omit advisory warnings
+    LintIssue:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Rule code that fired (e.g. sideko-sdk-language-enum)
+        severity:
+          type: string
+          enum:
+          - error
+          - warn
+          - hint
+          description: Severity of the lint finding
+        message:
+          type: string
+          description: Human-readable description of the lint finding
+        path:
+          type: string
+          description: JSON path or pointer to the offending location in the OpenAPI document
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/

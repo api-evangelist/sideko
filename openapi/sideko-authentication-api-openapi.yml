@@ -1,0 +1,137 @@
+openapi: 3.1.0
+info:
+  title: Sideko API Projects Authentication API
+  description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
+  version: '1.1'
+  contact:
+    name: Sideko Support
+    url: https://docs.sideko.dev/
+    email: support@sideko.dev
+  termsOfService: https://www.sideko.dev/legal/terms
+  license:
+    name: Proprietary
+    url: https://www.sideko.dev/legal/terms
+servers:
+- url: https://api.sideko.dev/v1
+  description: Sideko Production API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Authentication
+  description: Manage API keys and authentication for the Sideko platform.
+paths:
+  /auth/api-keys:
+    get:
+      operationId: listApiKeys
+      summary: List API Keys
+      description: Returns all API keys for the authenticated organization, including their names, scopes, and creation timestamps. Key values are masked for security.
+      tags:
+      - Authentication
+      responses:
+        '200':
+          description: List of API keys returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyList'
+        '401':
+          description: Invalid or missing API key
+    post:
+      operationId: createApiKey
+      summary: Create API Key
+      description: Creates a new API key for the authenticated organization. The full key value is only returned once at creation time and cannot be retrieved again.
+      tags:
+      - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+      responses:
+        '201':
+          description: API key created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyCreated'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Invalid or missing API key
+  /auth/api-keys/{keyId}:
+    delete:
+      operationId: deleteApiKey
+      summary: Delete API Key
+      description: Permanently revokes and deletes an API key. Any requests using the deleted key will be rejected immediately.
+      tags:
+      - Authentication
+      parameters:
+      - $ref: '#/components/parameters/keyId'
+      responses:
+        '204':
+          description: API key deleted successfully
+        '401':
+          description: Invalid or missing API key
+        '404':
+          description: API key not found
+components:
+  schemas:
+    ApiKeyList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiKey'
+    CreateApiKeyRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Human-readable name for the API key
+    ApiKeyCreated:
+      allOf:
+      - $ref: '#/components/schemas/ApiKey'
+      - type: object
+        properties:
+          key:
+            type: string
+            description: Full API key value (only returned at creation time)
+    ApiKey:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the API key
+        name:
+          type: string
+          description: Human-readable name for the API key
+        maskedKey:
+          type: string
+          description: Masked version of the key for display (e.g., sk-...abc1)
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the key was created
+  parameters:
+    keyId:
+      name: keyId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API key
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-sideko-key
+      description: Sideko API key for authentication
+externalDocs:
+  description: Sideko API Reference
+  url: https://docs.sideko.dev/reference/
