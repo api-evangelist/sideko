@@ -1,0 +1,28 @@
+{
+  "provider": "sideko",
+  "sources": [
+    "sideko-api-projects-api-openapi.yml",
+    "sideko-api-versions-api-openapi.yml",
+    "sideko-authentication-api-openapi.yml",
+    "sideko-documentation-api-openapi.yml",
+    "sideko-linting-api-openapi.yml",
+    "sideko-mcp-generation-api-openapi.yml",
+    "sideko-mock-servers-api-openapi.yml",
+    "sideko-sdk-generation-api-openapi.yml"
+  ],
+  "outputs": [
+    "sideko-api-projects-api-openapi.yml",
+    "sideko-api-versions-api-openapi.yml",
+    "sideko-authentication-api-openapi.yml",
+    "sideko-documentation-api-openapi.yml",
+    "sideko-linting-api-openapi.yml",
+    "sideko-mcp-generation-api-openapi.yml",
+    "sideko-mock-servers-api-openapi.yml",
+    "sideko-sdk-generation-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

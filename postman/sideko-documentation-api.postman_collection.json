@@ -1,0 +1,517 @@
+{
+  "info": {
+    "_postman_id": "8ce66e92-a5b0-49ac-9d35-48d9e46a2f8f",
+    "name": "Sideko API Projects Documentation API",
+    "description": "The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.\n\nContact Support:\n Name: Sideko Support\n Email: support@sideko.dev",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T02:53:15.000Z",
+    "updatedAt": "2026-07-28T02:53:15.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-8ce66e92-a5b0-49ac-9d35-48d9e46a2f8f"
+  },
+  "item": [
+    {
+      "name": "api-projects",
+      "item": [
+        {
+          "name": "{projectId}",
+          "item": [
+            {
+              "name": "docs",
+              "item": [
+                {
+                  "name": "List Documentation Sites",
+                  "id": "e35e3801-209c-4c89-9a3e-cc6d54208ef6",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api-projects",
+                        ":projectId",
+                        "docs"
+                      ],
+                      "variable": [
+                        {
+                          "id": "c9c06737-3d7f-46e7-ae82-6f5e5a7fca74",
+                          "key": "projectId",
+                          "value": "<uuid>",
+                          "description": "(Required) Unique identifier of the API project"
+                        }
+                      ]
+                    },
+                    "description": "Returns all documentation sites deployed for the API project, including their deployment status, URLs, and configuration."
+                  },
+                  "response": [
+                    {
+                      "id": "ff552bd7-f9ca-49ff-9de7-2b8332f029fd",
+                      "name": "List of documentation sites returned successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "docs"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"items\": [\n    {\n      \"id\": \"<uuid>\",\n      \"projectId\": \"<uuid>\",\n      \"url\": \"<uri>\",\n      \"status\": \"deploying\",\n      \"createdAt\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"projectId\": \"<uuid>\",\n      \"url\": \"<uri>\",\n      \"status\": \"deploying\",\n      \"createdAt\": \"<dateTime>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T02:53:15.000Z",
+                      "updatedAt": "2026-07-28T02:53:15.000Z",
+                      "uid": "35240-ff552bd7-f9ca-49ff-9de7-2b8332f029fd"
+                    },
+                    {
+                      "id": "cd03627f-34a1-4e7f-a089-774ee6a63012",
+                      "name": "Invalid or missing API key",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "docs"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:15.000Z",
+                      "updatedAt": "2026-07-28T02:53:15.000Z",
+                      "uid": "35240-cd03627f-34a1-4e7f-a089-774ee6a63012"
+                    },
+                    {
+                      "id": "8dbf3ed7-3121-4b9b-905a-80b4e1deabaa",
+                      "name": "API project not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "docs"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:15.000Z",
+                      "updatedAt": "2026-07-28T02:53:15.000Z",
+                      "uid": "35240-8dbf3ed7-3121-4b9b-905a-80b4e1deabaa"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:53:15.000Z",
+                  "updatedAt": "2026-07-28T02:53:15.000Z",
+                  "uid": "35240-e35e3801-209c-4c89-9a3e-cc6d54208ef6"
+                },
+                {
+                  "name": "Deploy Documentation Site",
+                  "id": "5f0da316-0dbc-4ba3-96e5-8d1ddbe80a56",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"customDomain\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api-projects",
+                        ":projectId",
+                        "docs"
+                      ],
+                      "variable": [
+                        {
+                          "id": "69329296-6e6e-4771-90c8-9113e96e5fb1",
+                          "key": "projectId",
+                          "value": "<uuid>",
+                          "description": "(Required) Unique identifier of the API project"
+                        }
+                      ]
+                    },
+                    "description": "Deploys or updates an API documentation site for the specified project version. Sideko generates and hosts a fully-featured documentation portal with interactive examples, authentication guides, and API reference pages."
+                  },
+                  "response": [
+                    {
+                      "id": "651b2020-3889-4644-bd85-118c56b84fd6",
+                      "name": "Documentation site deployment initiated",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"customDomain\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "docs"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Accepted",
+                      "code": 202,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<uuid>\",\n  \"projectId\": \"<uuid>\",\n  \"url\": \"<uri>\",\n  \"status\": \"live\",\n  \"createdAt\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-07-28T02:53:15.000Z",
+                      "updatedAt": "2026-07-28T02:53:15.000Z",
+                      "uid": "35240-651b2020-3889-4644-bd85-118c56b84fd6"
+                    },
+                    {
+                      "id": "ccda4e17-a2dc-469b-b2d7-da2bbe5a4cad",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"customDomain\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "docs"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:15.000Z",
+                      "updatedAt": "2026-07-28T02:53:15.000Z",
+                      "uid": "35240-ccda4e17-a2dc-469b-b2d7-da2bbe5a4cad"
+                    },
+                    {
+                      "id": "f1248ade-eac3-4dde-9a37-d0415e0d8ff1",
+                      "name": "Invalid or missing API key",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"customDomain\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "docs"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:15.000Z",
+                      "updatedAt": "2026-07-28T02:53:15.000Z",
+                      "uid": "35240-f1248ade-eac3-4dde-9a37-d0415e0d8ff1"
+                    },
+                    {
+                      "id": "9edb4155-3012-4b72-97db-b47e2452a646",
+                      "name": "API project not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"customDomain\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/docs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "docs"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:15.000Z",
+                      "updatedAt": "2026-07-28T02:53:15.000Z",
+                      "uid": "35240-9edb4155-3012-4b72-97db-b47e2452a646"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:53:15.000Z",
+                  "updatedAt": "2026-07-28T02:53:15.000Z",
+                  "uid": "35240-5f0da316-0dbc-4ba3-96e5-8d1ddbe80a56"
+                }
+              ],
+              "id": "a7050fc1-5645-4c85-8d54-e2618ae1acdc",
+              "createdAt": "2026-07-28T02:53:15.000Z",
+              "updatedAt": "2026-07-28T02:53:15.000Z",
+              "uid": "35240-a7050fc1-5645-4c85-8d54-e2618ae1acdc"
+            }
+          ],
+          "id": "9bfaa7f9-b160-4095-b6f3-ed24ba5433ad",
+          "createdAt": "2026-07-28T02:53:15.000Z",
+          "updatedAt": "2026-07-28T02:53:15.000Z",
+          "uid": "35240-9bfaa7f9-b160-4095-b6f3-ed24ba5433ad"
+        }
+      ],
+      "id": "ac5d75c4-3ee4-4b82-96c0-794bc3c15c12",
+      "createdAt": "2026-07-28T02:53:15.000Z",
+      "updatedAt": "2026-07-28T02:53:15.000Z",
+      "uid": "35240-ac5d75c4-3ee4-4b82-96c0-794bc3c15c12"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-sideko-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.sideko.dev/v1"
+    }
+  ]
+}

@@ -1,0 +1,715 @@
+{
+  "info": {
+    "_postman_id": "19deb009-98a0-46d1-93b7-b50fc32ed3d8",
+    "name": "Sideko API Projects MCP Generation API",
+    "description": "The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.\n\nContact Support:\n Name: Sideko Support\n Email: support@sideko.dev",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T02:53:18.000Z",
+    "updatedAt": "2026-07-28T02:53:18.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-19deb009-98a0-46d1-93b7-b50fc32ed3d8"
+  },
+  "item": [
+    {
+      "name": "api-projects",
+      "item": [
+        {
+          "name": "{projectId}",
+          "item": [
+            {
+              "name": "mcps",
+              "item": [
+                {
+                  "name": "{mcpId}",
+                  "item": [
+                    {
+                      "name": "Get MCP Generation",
+                      "id": "676cebf3-ef5d-44a1-b615-b019b3d8c25e",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/mcps/:mcpId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "mcps",
+                            ":mcpId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "6f982bda-1253-4473-8e49-863b93e18e4b",
+                              "key": "projectId",
+                              "value": "<uuid>",
+                              "description": "(Required) Unique identifier of the API project"
+                            },
+                            {
+                              "id": "c0f75599-aa49-4bbb-a4f6-487ba5436612",
+                              "key": "mcpId",
+                              "value": "<uuid>",
+                              "description": "(Required) Unique identifier of the MCP generation job"
+                            }
+                          ]
+                        },
+                        "description": "Returns the status and details of a specific MCP server generation job. When the status is complete, a download URL is provided to retrieve the generated MCP server archive."
+                      },
+                      "response": [
+                        {
+                          "id": "76c3c390-a46a-4d52-948d-56b8ebc58659",
+                          "name": "MCP generation job details returned successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "x-sideko-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api-projects/:projectId/mcps/:mcpId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api-projects",
+                                ":projectId",
+                                "mcps",
+                                ":mcpId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "projectId"
+                                },
+                                {
+                                  "key": "mcpId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<uuid>\",\n  \"projectId\": \"<uuid>\",\n  \"versionId\": \"<uuid>\",\n  \"transport\": \"stdio\",\n  \"status\": \"complete\",\n  \"downloadUrl\": \"<uri>\",\n  \"toolCount\": \"<integer>\",\n  \"createdAt\": \"<dateTime>\",\n  \"completedAt\": \"<dateTime>\"\n}",
+                          "createdAt": "2026-07-28T02:53:19.000Z",
+                          "updatedAt": "2026-07-28T02:53:19.000Z",
+                          "uid": "35240-76c3c390-a46a-4d52-948d-56b8ebc58659"
+                        },
+                        {
+                          "id": "3b116b91-9a82-48e4-af31-b166fe118169",
+                          "name": "Invalid or missing API key",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "x-sideko-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api-projects/:projectId/mcps/:mcpId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api-projects",
+                                ":projectId",
+                                "mcps",
+                                ":mcpId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "projectId"
+                                },
+                                {
+                                  "key": "mcpId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-07-28T02:53:19.000Z",
+                          "updatedAt": "2026-07-28T02:53:19.000Z",
+                          "uid": "35240-3b116b91-9a82-48e4-af31-b166fe118169"
+                        },
+                        {
+                          "id": "d3b14439-3819-4412-9af9-686db1183c49",
+                          "name": "MCP generation job not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "x-sideko-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api-projects/:projectId/mcps/:mcpId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api-projects",
+                                ":projectId",
+                                "mcps",
+                                ":mcpId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "projectId"
+                                },
+                                {
+                                  "key": "mcpId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-07-28T02:53:19.000Z",
+                          "updatedAt": "2026-07-28T02:53:19.000Z",
+                          "uid": "35240-d3b14439-3819-4412-9af9-686db1183c49"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T02:53:19.000Z",
+                      "updatedAt": "2026-07-28T02:53:19.000Z",
+                      "uid": "35240-676cebf3-ef5d-44a1-b615-b019b3d8c25e"
+                    }
+                  ],
+                  "id": "27c41410-e920-4e78-b451-d60e21f87c07",
+                  "createdAt": "2026-07-28T02:53:19.000Z",
+                  "updatedAt": "2026-07-28T02:53:19.000Z",
+                  "uid": "35240-27c41410-e920-4e78-b451-d60e21f87c07"
+                },
+                {
+                  "name": "List MCP Generations",
+                  "id": "b94ffc39-f6e2-40f4-ad80-9a9319b1a26c",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api-projects",
+                        ":projectId",
+                        "mcps"
+                      ],
+                      "variable": [
+                        {
+                          "id": "07f69159-6560-4847-af9d-decc0d58a13a",
+                          "key": "projectId",
+                          "value": "<uuid>",
+                          "description": "(Required) Unique identifier of the API project"
+                        }
+                      ]
+                    },
+                    "description": "Returns all Model Context Protocol (MCP) server generation jobs for an API project, including their status and download URLs when complete."
+                  },
+                  "response": [
+                    {
+                      "id": "6201fc72-8b23-41c7-8bc5-bf54755f28ec",
+                      "name": "List of MCP generation jobs returned successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "mcps"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"items\": [\n    {\n      \"id\": \"<uuid>\",\n      \"projectId\": \"<uuid>\",\n      \"versionId\": \"<uuid>\",\n      \"transport\": \"http\",\n      \"status\": \"running\",\n      \"downloadUrl\": \"<uri>\",\n      \"toolCount\": \"<integer>\",\n      \"createdAt\": \"<dateTime>\",\n      \"completedAt\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"projectId\": \"<uuid>\",\n      \"versionId\": \"<uuid>\",\n      \"transport\": \"stdio\",\n      \"status\": \"failed\",\n      \"downloadUrl\": \"<uri>\",\n      \"toolCount\": \"<integer>\",\n      \"createdAt\": \"<dateTime>\",\n      \"completedAt\": \"<dateTime>\"\n    }\n  ],\n  \"total\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T02:53:19.000Z",
+                      "updatedAt": "2026-07-28T02:53:19.000Z",
+                      "uid": "35240-6201fc72-8b23-41c7-8bc5-bf54755f28ec"
+                    },
+                    {
+                      "id": "baacf48d-3ed3-4432-b853-3a77ee3d4eef",
+                      "name": "Invalid or missing API key",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "mcps"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:19.000Z",
+                      "updatedAt": "2026-07-28T02:53:19.000Z",
+                      "uid": "35240-baacf48d-3ed3-4432-b853-3a77ee3d4eef"
+                    },
+                    {
+                      "id": "01ca2df0-ad1f-45b9-aaad-d377ce8b9c66",
+                      "name": "API project not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "mcps"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:19.000Z",
+                      "updatedAt": "2026-07-28T02:53:19.000Z",
+                      "uid": "35240-01ca2df0-ad1f-45b9-aaad-d377ce8b9c66"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:53:19.000Z",
+                  "updatedAt": "2026-07-28T02:53:19.000Z",
+                  "uid": "35240-b94ffc39-f6e2-40f4-ad80-9a9319b1a26c"
+                },
+                {
+                  "name": "Trigger MCP Generation",
+                  "id": "836ef530-659c-4405-8fdf-5ddad1b019eb",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"transport\": \"stdio\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api-projects",
+                        ":projectId",
+                        "mcps"
+                      ],
+                      "variable": [
+                        {
+                          "id": "2ca78ee4-de42-4439-8515-ada6626d1214",
+                          "key": "projectId",
+                          "value": "<uuid>",
+                          "description": "(Required) Unique identifier of the API project"
+                        }
+                      ]
+                    },
+                    "description": "Initiates a Model Context Protocol (MCP) server generation job for the specified API project version. The job produces an MCP server exposing one tool per OpenAPI operation so AI agents (Claude, Cursor, ChatGPT, Copilot) can call the API through structured MCP tools."
+                  },
+                  "response": [
+                    {
+                      "id": "3b9b7afd-2f9d-469a-b81c-6bfd449f0989",
+                      "name": "MCP generation job accepted and queued",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"transport\": \"stdio\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "mcps"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Accepted",
+                      "code": 202,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<uuid>\",\n  \"projectId\": \"<uuid>\",\n  \"versionId\": \"<uuid>\",\n  \"transport\": \"stdio\",\n  \"status\": \"complete\",\n  \"downloadUrl\": \"<uri>\",\n  \"toolCount\": \"<integer>\",\n  \"createdAt\": \"<dateTime>\",\n  \"completedAt\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-07-28T02:53:19.000Z",
+                      "updatedAt": "2026-07-28T02:53:19.000Z",
+                      "uid": "35240-3b9b7afd-2f9d-469a-b81c-6bfd449f0989"
+                    },
+                    {
+                      "id": "289eddf0-7a3d-40b6-8f6b-bed651a53566",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"transport\": \"stdio\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "mcps"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:19.000Z",
+                      "updatedAt": "2026-07-28T02:53:19.000Z",
+                      "uid": "35240-289eddf0-7a3d-40b6-8f6b-bed651a53566"
+                    },
+                    {
+                      "id": "0f87abd3-d5fe-4be1-aa90-fc551f4d1ca8",
+                      "name": "Invalid or missing API key",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"transport\": \"stdio\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "mcps"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:19.000Z",
+                      "updatedAt": "2026-07-28T02:53:19.000Z",
+                      "uid": "35240-0f87abd3-d5fe-4be1-aa90-fc551f4d1ca8"
+                    },
+                    {
+                      "id": "33355251-8a51-4257-98c1-50b167359ee7",
+                      "name": "API project not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "x-sideko-key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"versionId\": \"<uuid>\",\n  \"transport\": \"stdio\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api-projects/:projectId/mcps",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api-projects",
+                            ":projectId",
+                            "mcps"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T02:53:19.000Z",
+                      "updatedAt": "2026-07-28T02:53:19.000Z",
+                      "uid": "35240-33355251-8a51-4257-98c1-50b167359ee7"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:53:19.000Z",
+                  "updatedAt": "2026-07-28T02:53:19.000Z",
+                  "uid": "35240-836ef530-659c-4405-8fdf-5ddad1b019eb"
+                }
+              ],
+              "id": "09daee76-e4cf-4164-bcdb-ffe8097998c1",
+              "createdAt": "2026-07-28T02:53:19.000Z",
+              "updatedAt": "2026-07-28T02:53:19.000Z",
+              "uid": "35240-09daee76-e4cf-4164-bcdb-ffe8097998c1"
+            }
+          ],
+          "id": "8e3413f1-6ae8-402c-9d24-6980ce7b68cb",
+          "createdAt": "2026-07-28T02:53:19.000Z",
+          "updatedAt": "2026-07-28T02:53:19.000Z",
+          "uid": "35240-8e3413f1-6ae8-402c-9d24-6980ce7b68cb"
+        }
+      ],
+      "id": "6cb87d89-4b3d-4cec-bce7-82623d4ed194",
+      "createdAt": "2026-07-28T02:53:19.000Z",
+      "updatedAt": "2026-07-28T02:53:19.000Z",
+      "uid": "35240-6cb87d89-4b3d-4cec-bce7-82623d4ed194"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-sideko-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.sideko.dev/v1"
+    }
+  ]
+}
