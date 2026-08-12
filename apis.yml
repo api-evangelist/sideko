@@ -170,8 +170,6 @@ apis:
     url: https://docs.sideko.dev/
   - type: SpectralRules
     url: rules/sideko-rules.yml
-  - type: Capabilities
-    url: capabilities/api-tooling-lifecycle.yaml
   - type: JSONSchema
     url: json-schema/sideko-api-project-schema.json
   - type: JSONSchema
@@ -220,8 +218,6 @@ apis:
     url: https://docs.sideko.dev/
   - type: SpectralRules
     url: rules/sideko-rules.yml
-  - type: Capabilities
-    url: capabilities/api-tooling-lifecycle.yaml
   - type: JSONSchema
     url: json-schema/sideko-api-project-schema.json
   - type: JSONSchema
@@ -268,8 +264,6 @@ apis:
     url: https://docs.sideko.dev/
   - type: SpectralRules
     url: rules/sideko-rules.yml
-  - type: Capabilities
-    url: capabilities/api-tooling-lifecycle.yaml
   - type: JSONSchema
     url: json-schema/sideko-api-project-schema.json
   - type: JSONSchema
@@ -318,8 +312,6 @@ apis:
     url: https://docs.sideko.dev/
   - type: SpectralRules
     url: rules/sideko-rules.yml
-  - type: Capabilities
-    url: capabilities/api-tooling-lifecycle.yaml
   - type: JSONSchema
     url: json-schema/sideko-api-project-schema.json
   - type: JSONSchema
@@ -368,8 +360,6 @@ apis:
     url: https://docs.sideko.dev/
   - type: SpectralRules
     url: rules/sideko-rules.yml
-  - type: Capabilities
-    url: capabilities/api-tooling-lifecycle.yaml
   - type: JSONSchema
     url: json-schema/sideko-api-project-schema.json
   - type: JSONSchema
@@ -418,8 +408,6 @@ apis:
     url: https://docs.sideko.dev/
   - type: SpectralRules
     url: rules/sideko-rules.yml
-  - type: Capabilities
-    url: capabilities/api-tooling-lifecycle.yaml
   - type: JSONSchema
     url: json-schema/sideko-api-project-schema.json
   - type: JSONSchema
@@ -467,8 +455,6 @@ apis:
     url: https://docs.sideko.dev/
   - type: SpectralRules
     url: rules/sideko-rules.yml
-  - type: Capabilities
-    url: capabilities/api-tooling-lifecycle.yaml
   - type: JSONSchema
     url: json-schema/sideko-api-project-schema.json
   - type: JSONSchema
@@ -518,8 +504,6 @@ apis:
     url: https://docs.sideko.dev/
   - type: SpectralRules
     url: rules/sideko-rules.yml
-  - type: Capabilities
-    url: capabilities/api-tooling-lifecycle.yaml
   - type: JSONSchema
     url: json-schema/sideko-api-project-schema.json
   - type: JSONSchema
