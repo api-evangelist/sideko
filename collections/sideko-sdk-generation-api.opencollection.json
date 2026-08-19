@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sideko API Projects SDK Generation API",
+    "version": "1.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-sideko-key",
+      "value": "{{x-sideko-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SDK Generation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List SDK Generations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/sdks",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all SDK generation jobs for an API project across all target languages, including their status and download URLs when complete."
+        },
+        {
+          "info": {
+            "name": "Trigger SDK Generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/sdks",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates an SDK generation job for the specified API project version and target programming language. The job runs asynchronously and the resulting SDK can be downloaded when the status is complete."
+        },
+        {
+          "info": {
+            "name": "Get SDK Generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/sdks/:sdkId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              },
+              {
+                "name": "sdkId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the SDK generation job"
+              }
+            ]
+          },
+          "docs": "Returns the status and details of a specific SDK generation job. When the status is complete, a download URL is provided to retrieve the generated SDK archive."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

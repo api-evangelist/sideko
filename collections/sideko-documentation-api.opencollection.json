@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sideko API Projects Documentation API",
+    "version": "1.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-sideko-key",
+      "value": "{{x-sideko-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Documentation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Documentation Sites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/docs",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all documentation sites deployed for the API project, including their deployment status, URLs, and configuration."
+        },
+        {
+          "info": {
+            "name": "Deploy Documentation Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/docs",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys or updates an API documentation site for the specified project version. Sideko generates and hosts a fully-featured documentation portal with interactive examples, authentication guides, and API reference pages."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

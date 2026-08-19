@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sideko API Projects Linting API",
+    "version": "1.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-sideko-key",
+      "value": "{{x-sideko-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Linting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lint API Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/lint",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Runs Sideko's OpenAPI linting rules against a project version and returns any blocking or advisory linting errors that would prevent SDK, MCP, or mock generation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

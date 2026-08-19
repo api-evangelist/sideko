@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sideko API Projects Authentication API",
+    "version": "1.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-sideko-key",
+      "value": "{{x-sideko-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/auth/api-keys"
+          },
+          "docs": "Returns all API keys for the authenticated organization, including their names, scopes, and creation timestamps. Key values are masked for security."
+        },
+        {
+          "info": {
+            "name": "Create API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/auth/api-keys",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key for the authenticated organization. The full key value is only returned once at creation time and cannot be retrieved again."
+        },
+        {
+          "info": {
+            "name": "Delete API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sideko.dev/v1/auth/api-keys/:keyId",
+            "params": [
+              {
+                "name": "keyId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API key"
+              }
+            ]
+          },
+          "docs": "Permanently revokes and deletes an API key. Any requests using the deleted key will be rejected immediately."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

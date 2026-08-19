@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sideko API Projects MCP Generation API",
+    "version": "1.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-sideko-key",
+      "value": "{{x-sideko-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "MCP Generation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List MCP Generations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mcps",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all Model Context Protocol (MCP) server generation jobs for an API project, including their status and download URLs when complete."
+        },
+        {
+          "info": {
+            "name": "Trigger MCP Generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mcps",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a Model Context Protocol (MCP) server generation job for the specified API project version. The job produces an MCP server exposing one tool per OpenAPI operation so AI agents (Claude, Cursor, ChatGPT, Copilot) can call the API through structured MCP tools."
+        },
+        {
+          "info": {
+            "name": "Get MCP Generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mcps/:mcpId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              },
+              {
+                "name": "mcpId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the MCP generation job"
+              }
+            ]
+          },
+          "docs": "Returns the status and details of a specific MCP server generation job. When the status is complete, a download URL is provided to retrieve the generated MCP server archive."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

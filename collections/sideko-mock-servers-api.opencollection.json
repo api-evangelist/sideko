@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sideko API Projects Mock Servers API",
+    "version": "1.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-sideko-key",
+      "value": "{{x-sideko-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Mock Servers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Mock Servers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mock-servers",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all mock server instances deployed for the API project, including their status, endpoint URLs, and configuration."
+        },
+        {
+          "info": {
+            "name": "Deploy Mock Server",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mock-servers",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys a mock server for the specified API project version. The mock server automatically generates realistic responses based on the OpenAPI specification schemas and examples."
+        },
+        {
+          "info": {
+            "name": "Delete Mock Server",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/mock-servers/:serverId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              },
+              {
+                "name": "serverId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the mock server"
+              }
+            ]
+          },
+          "docs": "Permanently shuts down and removes a mock server instance. All traffic to the mock server endpoint will fail after deletion."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

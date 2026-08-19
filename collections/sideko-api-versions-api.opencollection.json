@@ -1,0 +1,99 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sideko API Projects API Versions API",
+    "version": "1.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-sideko-key",
+      "value": "{{x-sideko-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Versions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/versions",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ]
+          },
+          "docs": "Returns all versions of an API project. Each version corresponds to a distinct OpenAPI specification uploaded to the project."
+        },
+        {
+          "info": {
+            "name": "Create API Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/versions",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Uploads a new OpenAPI specification to create a new version of the API project. Accepts OpenAPI 3.0 and 3.1 specifications in JSON or YAML format and runs Sideko linting before accepting the version."
+        },
+        {
+          "info": {
+            "name": "Download API Version Spec",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sideko.dev/v1/api-projects/:projectId/versions/:versionId/download",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API project"
+              },
+              {
+                "name": "versionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the API version"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Preferred output format for the downloaded specification"
+              }
+            ]
+          },
+          "docs": "Returns the raw OpenAPI specification (JSON or YAML) for a specific API project version. Matches the CLI command `sideko api version download`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
