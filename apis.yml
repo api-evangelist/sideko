@@ -6,6 +6,12 @@ apis:
   tags:
   - CLI
   - Developer Tools
+  - SDK
+  - MCP
+  - OpenAPI Linting
+  tags_raw:
+  - CLI
+  - Developer Tools
   - SDKs
   - MCP
   - OpenAPI Linting
@@ -538,6 +544,18 @@ apis:
     url: https://github.com/Sideko-Inc/sideko
 name: Sideko
 tags:
+  - CLI
+  - Documentation
+  - Mock Servers
+  - Platform
+  - SDK
+  - API Tooling
+  - SDK Generation
+  - MCP Generation
+  - Artificial Intelligence
+  - Hybrid Codegen
+  - OpenAPI Linting
+tags_raw:
   - CLI
   - Documentation
   - Mock Servers
