@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Sideko API Projects API Versions API
+  title: Sideko API Versions API
   description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
   version: '1.1'
   contact:
@@ -102,27 +102,6 @@ paths:
           description: API version not found
 components:
   schemas:
-    CreateApiVersionRequest:
-      type: object
-      required:
-      - spec
-      properties:
-        spec:
-          type: string
-          format: binary
-          description: OpenAPI specification file (JSON or YAML)
-        version:
-          type: string
-          description: Override the version from the spec info.version field
-    ApiVersionList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiVersion'
-        total:
-          type: integer
     ApiVersion:
       type: object
       properties:
@@ -147,6 +126,27 @@ components:
           type: string
           format: date-time
           description: Timestamp when the version was created
+    ApiVersionList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiVersion'
+        total:
+          type: integer
+    CreateApiVersionRequest:
+      type: object
+      required:
+      - spec
+      properties:
+        spec:
+          type: string
+          format: binary
+          description: OpenAPI specification file (JSON or YAML)
+        version:
+          type: string
+          description: Override the version from the spec info.version field
   parameters:
     versionId:
       name: versionId

@@ -1,14 +1,7 @@
 {
   "provider": "sideko",
   "sources": [
-    "sideko-api-projects-api-openapi.yml",
-    "sideko-api-versions-api-openapi.yml",
-    "sideko-authentication-api-openapi.yml",
-    "sideko-documentation-api-openapi.yml",
-    "sideko-linting-api-openapi.yml",
-    "sideko-mcp-generation-api-openapi.yml",
-    "sideko-mock-servers-api-openapi.yml",
-    "sideko-sdk-generation-api-openapi.yml"
+    "_original/sideko-openapi.yml"
   ],
   "outputs": [
     "sideko-api-projects-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sideko-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "sideko-api-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sideko-api-versions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sideko-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sideko-documentation-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sideko-linting-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sideko-mcp-generation-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sideko-mock-servers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sideko-sdk-generation-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

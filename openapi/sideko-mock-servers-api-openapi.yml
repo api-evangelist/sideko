@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Sideko API Projects Mock Servers API
+  title: Sideko Mock Servers API
   description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
   version: '1.1'
   contact:
@@ -86,6 +86,13 @@ paths:
           description: Mock server not found
 components:
   schemas:
+    MockServerList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MockServer'
     DeployMockServerRequest:
       type: object
       required:
@@ -122,22 +129,7 @@ components:
           type: string
           format: date-time
           description: Timestamp when the mock server was deployed
-    MockServerList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/MockServer'
   parameters:
-    serverId:
-      name: serverId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the mock server
     projectId:
       name: projectId
       in: path
@@ -146,6 +138,14 @@ components:
         type: string
         format: uuid
       description: Unique identifier of the API project
+    serverId:
+      name: serverId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the mock server
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

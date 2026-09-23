@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Sideko API Projects Linting API
+  title: Sideko Linting API
   description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
   version: '1.1'
   contact:
@@ -48,6 +48,17 @@ paths:
           description: API project not found
 components:
   schemas:
+    LintRequest:
+      type: object
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: API version to lint (defaults to latest if omitted)
+        errorsOnly:
+          type: boolean
+          default: false
+          description: Return only blocking errors, omit advisory warnings
     LintResult:
       type: object
       properties:
@@ -64,17 +75,6 @@ components:
         warningCount:
           type: integer
           description: Number of severity=warn findings
-    LintRequest:
-      type: object
-      properties:
-        versionId:
-          type: string
-          format: uuid
-          description: API version to lint (defaults to latest if omitted)
-        errorsOnly:
-          type: boolean
-          default: false
-          description: Return only blocking errors, omit advisory warnings
     LintIssue:
       type: object
       properties:

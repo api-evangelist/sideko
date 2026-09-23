@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Sideko API Projects Authentication API
+  title: Sideko Authentication API
   description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
   version: '1.1'
   contact:
@@ -77,21 +77,6 @@ paths:
           description: API key not found
 components:
   schemas:
-    ApiKeyList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiKey'
-    CreateApiKeyRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Human-readable name for the API key
     ApiKeyCreated:
       allOf:
       - $ref: '#/components/schemas/ApiKey'
@@ -100,6 +85,21 @@ components:
           key:
             type: string
             description: Full API key value (only returned at creation time)
+    CreateApiKeyRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Human-readable name for the API key
+    ApiKeyList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiKey'
     ApiKey:
       type: object
       properties:

@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Sideko API Projects MCP Generation API
+  title: Sideko MCP Generation API
   description: The Sideko REST API enables developers to programmatically manage API projects, generate SDKs in six languages, generate Model Context Protocol (MCP) servers, deploy CLI tools, create mock servers, lint OpenAPI specifications, and publish API documentation. The API powers the Sideko platform which transforms OpenAPI specifications into complete developer tooling suites (SDKs, MCP, Docs, Mocks, CLIs) automatically.
   version: '1.1'
   contact:
@@ -89,33 +89,24 @@ paths:
         '404':
           description: MCP generation job not found
 components:
-  parameters:
-    mcpId:
-      name: mcpId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the MCP generation job
-    projectId:
-      name: projectId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the API project
   schemas:
-    McpGenerationList:
+    TriggerMcpRequest:
       type: object
+      required:
+      - versionId
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/McpGeneration'
-        total:
-          type: integer
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to generate the MCP server from
+        transport:
+          type: string
+          enum:
+          - stdio
+          - http
+          - sse
+          default: stdio
+          description: Transport the generated MCP server should run over
     McpGeneration:
       type: object
       properties:
@@ -161,23 +152,32 @@ components:
           type: string
           format: date-time
           description: Timestamp when the generation job completed
-    TriggerMcpRequest:
+    McpGenerationList:
       type: object
-      required:
-      - versionId
       properties:
-        versionId:
-          type: string
-          format: uuid
-          description: ID of the API version to generate the MCP server from
-        transport:
-          type: string
-          enum:
-          - stdio
-          - http
-          - sse
-          default: stdio
-          description: Transport the generated MCP server should run over
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpGeneration'
+        total:
+          type: integer
+  parameters:
+    mcpId:
+      name: mcpId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the MCP generation job
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
