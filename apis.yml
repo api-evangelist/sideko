@@ -614,6 +614,8 @@ description: >-
   Magic Hour AI; Sideko's published Stripe SDK benchmark generated over one million lines of SDK code in under sixty
   seconds.
 common:
+  - type: VendorFacets
+    url: vendor-facets/sideko-vendor-facets.yml
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/sideko/overview
   - type: AgenticAccess

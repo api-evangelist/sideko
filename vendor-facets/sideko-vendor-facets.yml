@@ -1,0 +1,252 @@
+# Vendor facets — Sideko. Generates SDKs, CLIs, docs and mock servers from OpenAPI 3.0/3.1, with
+# an automatic docs MCP. The headline: broad pointer lift (SDKs, CLI, docs, a mock-server sandbox),
+# but its own docs site is a client-rendered shell (a plain GET returned 11 characters of text on
+# 2026-09-25). The CLAUDE.md files it writes into SDKs are not Agent Skills and earn nothing.
+vendor: sideko
+name: Sideko
+website: https://sideko.dev
+areas:
+- sdk-generation
+registry_keys: []
+rubric_schema_version: 0.22.0
+generated: '2026-09-25'
+features_refreshed: '2026-09-25'
+basis: capability
+summary: >-
+  Sideko can lift the SDK pointers (Python, TypeScript, Go, Rust, Java and C# GA, Ruby beta), a CLI, documentation
+  and reference pointers, and a sandbox pointer through its mock servers. Each counts only when declared
+  in apis.yml. Its docs MCP is one template across customers, so `platform` (0.25). Sideko's own docs
+  on the same platform are a JavaScript shell to a plain reader: 11 characters of text before rendering.
+  That puts any docs-derived probe on a Sideko site at risk of a false negative. The CLAUDE.md files it
+  writes into SDKs are coding-assistant context, not Agent Skills.
+features:
+- id: sdk-generation
+  name: SDK generation
+  description: >-
+    SDKs from OpenAPI 3.0 or 3.1 for Python, TypeScript, Go, Rust, Java and C# (GA) and Ruby (beta), with
+    example snippets and module support.
+  source: https://docs.sideko.dev/sdks
+  tier: paid
+- id: cli-generation
+  name: CLI generation
+  description: CLI is a GA generation target alongside the SDK languages.
+  source: https://docs.sideko.dev/sdks
+  tier: paid
+- id: docs-platform
+  name: Documentation projects
+  description: >-
+    A deployed docs site per project, with custom pages, generated API references, MDX components, versioning
+    and Ask AI.
+  source: https://docs.sideko.dev/building-documentation
+  tier: paid
+- id: mock-servers
+  name: Mock servers
+  description: Mock servers generated from an API project's OpenAPI.
+  source: https://docs.sideko.dev/api-management
+  tier: paid
+- id: openapi-linting
+  name: OpenAPI linting
+  description: Linting of uploaded OpenAPI versions within an API project.
+  source: https://docs.sideko.dev/api-management
+  tier: paid
+- id: docs-mcp
+  name: Automatic MCP for docs
+  description: An MCP server generated automatically for the documentation.
+  source: https://sideko.dev/
+  tier: paid
+- id: llm-assistant-files
+  name: LLM coding-assistant files (CLAUDE.md)
+  description: >-
+    Hybrid codegen writes a CLAUDE.md into Python and TypeScript SDKs, the same file for every coding
+    assistant.
+  source: https://docs.sideko.dev/sdks/llm-coding-assistant-files
+  tier: paid
+maps:
+- feature: sdk-generation
+  check: sdk_count_1
+  layer: composite
+  provider_must: Publish a generated SDK and declare it as an SDK entry in apis.yml.
+  catalog_pass_rate: 0.148
+  facet: developer_ergonomics
+  points: 3
+  baseline_pass_rate: 0.413
+- feature: sdk-generation
+  check: sdk_count_3
+  layer: composite
+  provider_must: Publish three or more language SDKs and declare each as its own SDK entry.
+  catalog_pass_rate: 0.018
+  facet: developer_ergonomics
+  points: 4
+  baseline_pass_rate: 0.043
+- feature: cli-generation
+  check: cli_present
+  layer: composite
+  provider_must: Release the generated CLI and declare it as a CLI entry.
+  catalog_pass_rate: 0.063
+  facet: developer_ergonomics
+  points: 3
+  baseline_pass_rate: 0.19
+- feature: docs-platform
+  check: documentation_present
+  layer: composite
+  provider_must: Declare the deployed docs site as a Documentation entry.
+  note: >-
+    Sideko's own docs return an 11-character shell to a plain GET, so any liveness or content probe on
+    a Sideko-hosted site may read it as empty.
+  catalog_pass_rate: 0.453
+  facet: developer_ergonomics
+  points: 4
+  baseline_pass_rate: 0.95
+  saturated: true
+  saturated_note: >-
+    95% of providers with a contract, docs and a reference already earn this; the vendor cannot move it
+    for most of its buyers.
+- feature: docs-platform
+  check: api_reference_present
+  layer: composite
+  provider_must: Declare the generated API reference as an APIReference entry.
+  catalog_pass_rate: 0.222
+  facet: developer_ergonomics
+  points: 3
+  baseline_pass_rate: 0.942
+  saturated: true
+  saturated_note: >-
+    94% of providers with a contract, docs and a reference already earn this; the vendor cannot move it
+    for most of its buyers.
+- feature: mock-servers
+  check: console_or_sandbox
+  layer: composite
+  provider_must: Expose the mock server publicly and declare it as a Sandbox entry.
+  catalog_pass_rate: 0.089
+  facet: developer_ergonomics
+  points: 3
+  baseline_pass_rate: 0.332
+- feature: sdk-generation
+  check: openapi_examples
+  layer: agent_readiness
+  grade: documented
+  partial: true
+  partial_note: >-
+    SDK example snippets are not request/response examples in the contract, so only the Code Samples link
+    fallback (0.25) is reached.
+  points: 7
+  baseline_pass_rate: 0.36
+- feature: docs-mcp
+  check: mcp_server
+  layer: agent_readiness
+  grade: platform
+  provider_must: Declare the docs MCP in the provider's mcp/ manifest.
+  note: >-
+    A docs-search server generated automatically for every Sideko docs site is one tool shape across customers,
+    which 0.22.0 grades `platform` (0.25). It searches docs; it does not call the API.
+  points: 12
+  baseline_pass_rate: 0.22
+- feature: openapi-linting
+  check: operations_description_coverage
+  layer: composite
+  conditional: true
+  condition: The linter reports. The provider has to write the missing descriptions and republish the
+    contract.
+  catalog_pass_rate: 0.473
+  facet: contract_quality
+  points: 6
+  baseline_pass_rate: 0.643
+earns_nothing:
+- feature: llm-assistant-files
+  check: agent_skill_present
+  why: >-
+    A CLAUDE.md inside an SDK repo is coding-assistant context, not an Agent Skill, and it is not declared
+    on the provider's surface.
+- feature: sdk-generation
+  check: examples_present
+  why: SDK snippets are not request or response examples on the contract's operations.
+- feature: sdk-generation
+  check: idempotency
+  layer: agent_readiness
+  why: Generation does not add an idempotency key to the contract.
+out_of_reach:
+  checks:
+  - llms_txt_published
+  - agent_skills
+  - postman_present
+  - overlay_published
+  - contract_present
+  - status_page_present
+  - well_known_published
+  note: >-
+    No llms.txt, Agent Skill, Postman or overlay output appears on the pages fetched. Terraform and PHP
+    are listed as coming soon.
+unscored_practice:
+- feature: llm-assistant-files
+  why: >-
+    Coding-assistant context files shipped inside SDKs are a real agent-facing practice that no check
+    reads.
+surface:
+  contract_quality:
+    reachable: 6.0
+    total: 211
+  developer_ergonomics:
+    reachable: 20.0
+    total: 42
+  agent_readiness:
+    reachable: 4.8
+    total: 139
+hard_rule: >-
+  A model, not a score. Adopting this vendor changes a provider's Kin Score only when the provider publishes
+  the resulting artifacts on its own surface; nothing here writes a score, and no sponsorship or partnership
+  can.
+method: searched
+source:
+- https://docs.sideko.dev/api-management
+- https://docs.sideko.dev/building-documentation
+- https://docs.sideko.dev/sdks
+- https://docs.sideko.dev/sdks/llm-coding-assistant-files
+- https://sideko.dev/
+measured:
+  cohort:
+    method: vendors-catalog.json detections (CNAME / header / URL shape / markup), never a name match
+    detected: 0
+    in_baseline: 0
+  control:
+    basis: providers earning contract_present + documentation_present + api_reference_present, minus the
+      cohort
+    n: 5216
+  metric: >-
+    cohort_pct / control_pct = mean share of the check's points earned (derived and platform credit weighted),
+    x100
+  measured_on: '2026-09-25'
+  status: 'not measurable: 0 detected customers clear the baseline (need 20)'
+simulation:
+  simulated_on: '2026-09-25'
+  rubric: 0.23.0
+  population: providers publishing a contract (contract_present earned), replayable exactly
+  providers: 8977
+  providers_unreplayable: 987
+  providers_moved: 8957
+  conditional_rows: excluded (they depend on what the API already does)
+  composite_lift:
+    median: 6.2
+    p75: 7.6
+    p90: 7.8
+    max: 9.6
+    mean_among_movers: 6.0
+  agent_readiness_lift:
+    median: 2.2
+    p75: 3.4
+    p90: 3.5
+    max: 4.0
+    mean_among_movers: 2.7
+  facet_lift_median_among_movers:
+    developer_ergonomics: 31.0
+  composite_band_moves:
+    thin -> developing: 2111
+    developing -> strong: 1122
+    emerging -> thin: 389
+    strong -> exemplar: 308
+    minimal -> emerging: 3
+  agent_readiness_band_moves:
+    agent-aware -> agent-ready: 1006
+    agent-ready -> agent-native: 87
+  method: >-
+    each provider's own kin/checks file, the vendor's maps at their stated credit, the scorer's composite
+    formula; from -> to, nothing written
