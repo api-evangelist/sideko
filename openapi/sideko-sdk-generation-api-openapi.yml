@@ -107,15 +107,6 @@ components:
         format: uuid
       description: Unique identifier of the API project
   schemas:
-    SdkGenerationList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SdkGeneration'
-        total:
-          type: integer
     SdkGeneration:
       type: object
       properties:
@@ -208,6 +199,15 @@ components:
             - cursor
             - gemini
             - github_copilot
+    SdkGenerationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SdkGeneration'
+        total:
+          type: integer
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

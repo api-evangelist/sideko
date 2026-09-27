@@ -102,6 +102,27 @@ paths:
           description: API version not found
 components:
   schemas:
+    CreateApiVersionRequest:
+      type: object
+      required:
+      - spec
+      properties:
+        spec:
+          type: string
+          format: binary
+          description: OpenAPI specification file (JSON or YAML)
+        version:
+          type: string
+          description: Override the version from the spec info.version field
+    ApiVersionList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiVersion'
+        total:
+          type: integer
     ApiVersion:
       type: object
       properties:
@@ -126,27 +147,6 @@ components:
           type: string
           format: date-time
           description: Timestamp when the version was created
-    ApiVersionList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiVersion'
-        total:
-          type: integer
-    CreateApiVersionRequest:
-      type: object
-      required:
-      - spec
-      properties:
-        spec:
-          type: string
-          format: binary
-          description: OpenAPI specification file (JSON or YAML)
-        version:
-          type: string
-          description: Override the version from the spec info.version field
   parameters:
     versionId:
       name: versionId
