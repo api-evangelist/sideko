@@ -89,24 +89,24 @@ paths:
         '404':
           description: MCP generation job not found
 components:
-  parameters:
-    mcpId:
-      name: mcpId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the MCP generation job
-    projectId:
-      name: projectId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the API project
   schemas:
+    TriggerMcpRequest:
+      type: object
+      required:
+      - versionId
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to generate the MCP server from
+        transport:
+          type: string
+          enum:
+          - stdio
+          - http
+          - sse
+          default: stdio
+          description: Transport the generated MCP server should run over
     McpGeneration:
       type: object
       properties:
@@ -152,23 +152,6 @@ components:
           type: string
           format: date-time
           description: Timestamp when the generation job completed
-    TriggerMcpRequest:
-      type: object
-      required:
-      - versionId
-      properties:
-        versionId:
-          type: string
-          format: uuid
-          description: ID of the API version to generate the MCP server from
-        transport:
-          type: string
-          enum:
-          - stdio
-          - http
-          - sse
-          default: stdio
-          description: Transport the generated MCP server should run over
     McpGenerationList:
       type: object
       properties:
@@ -178,6 +161,23 @@ components:
             $ref: '#/components/schemas/McpGeneration'
         total:
           type: integer
+  parameters:
+    mcpId:
+      name: mcpId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the MCP generation job
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

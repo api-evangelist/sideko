@@ -150,6 +150,15 @@ components:
         description:
           type: string
           description: Optional description of the API
+    UpdateApiProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New name for the API project
+        description:
+          type: string
+          description: Updated description of the API
     ApiProjectList:
       type: object
       properties:
@@ -193,15 +202,6 @@ components:
           type: string
           format: date-time
           description: Timestamp when the project was last updated
-    UpdateApiProjectRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: New name for the API project
-        description:
-          type: string
-          description: Updated description of the API
   parameters:
     projectId:
       name: projectId

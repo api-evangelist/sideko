@@ -101,19 +101,24 @@ paths:
         '404':
           description: API version not found
 components:
+  parameters:
+    versionId:
+      name: versionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API version
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
   schemas:
-    CreateApiVersionRequest:
-      type: object
-      required:
-      - spec
-      properties:
-        spec:
-          type: string
-          format: binary
-          description: OpenAPI specification file (JSON or YAML)
-        version:
-          type: string
-          description: Override the version from the spec info.version field
     ApiVersionList:
       type: object
       properties:
@@ -147,23 +152,18 @@ components:
           type: string
           format: date-time
           description: Timestamp when the version was created
-  parameters:
-    versionId:
-      name: versionId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the API version
-    projectId:
-      name: projectId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the API project
+    CreateApiVersionRequest:
+      type: object
+      required:
+      - spec
+      properties:
+        spec:
+          type: string
+          format: binary
+          description: OpenAPI specification file (JSON or YAML)
+        version:
+          type: string
+          description: Override the version from the spec info.version field
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

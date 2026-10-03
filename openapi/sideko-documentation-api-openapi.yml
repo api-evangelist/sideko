@@ -69,6 +69,18 @@ paths:
           description: API project not found
 components:
   schemas:
+    DeployDocSiteRequest:
+      type: object
+      required:
+      - versionId
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to deploy documentation for
+        customDomain:
+          type: string
+          description: Optional custom domain for the documentation site
     DocSite:
       type: object
       properties:
@@ -95,18 +107,6 @@ components:
           type: string
           format: date-time
           description: Timestamp when the site was first deployed
-    DeployDocSiteRequest:
-      type: object
-      required:
-      - versionId
-      properties:
-        versionId:
-          type: string
-          format: uuid
-          description: ID of the API version to deploy documentation for
-        customDomain:
-          type: string
-          description: Optional custom domain for the documentation site
     DocSiteList:
       type: object
       properties:

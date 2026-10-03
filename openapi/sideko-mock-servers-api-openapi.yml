@@ -95,6 +95,13 @@ components:
           type: string
           format: uuid
           description: ID of the API version to deploy mock server for
+    MockServerList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MockServer'
     MockServer:
       type: object
       properties:
@@ -122,13 +129,6 @@ components:
           type: string
           format: date-time
           description: Timestamp when the mock server was deployed
-    MockServerList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/MockServer'
   parameters:
     serverId:
       name: serverId

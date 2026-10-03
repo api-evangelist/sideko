@@ -89,24 +89,50 @@ paths:
         '404':
           description: SDK generation job not found
 components:
-  parameters:
-    sdkId:
-      name: sdkId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the SDK generation job
-    projectId:
-      name: projectId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the API project
   schemas:
+    TriggerSdkRequest:
+      type: object
+      required:
+      - language
+      - versionId
+      properties:
+        language:
+          type: string
+          enum:
+          - python
+          - typescript
+          - java
+          - go
+          - csharp
+          - rust
+          description: Target programming language for the SDK
+        versionId:
+          type: string
+          format: uuid
+          description: ID of the API version to generate SDK from
+        ghActions:
+          type: boolean
+          default: false
+          description: Generate GitHub Actions for testing and publishing the SDK
+        llmCodingAssistants:
+          type: array
+          description: LLM coding-assistant rule files to include so agents can edit the SDK safely
+          items:
+            type: string
+            enum:
+            - claude_code
+            - cursor
+            - gemini
+            - github_copilot
+    SdkGenerationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SdkGeneration'
+        total:
+          type: integer
     SdkGeneration:
       type: object
       properties:
@@ -165,49 +191,23 @@ components:
           type: string
           format: date-time
           description: Timestamp when the generation job completed
-    TriggerSdkRequest:
-      type: object
-      required:
-      - language
-      - versionId
-      properties:
-        language:
-          type: string
-          enum:
-          - python
-          - typescript
-          - java
-          - go
-          - csharp
-          - rust
-          description: Target programming language for the SDK
-        versionId:
-          type: string
-          format: uuid
-          description: ID of the API version to generate SDK from
-        ghActions:
-          type: boolean
-          default: false
-          description: Generate GitHub Actions for testing and publishing the SDK
-        llmCodingAssistants:
-          type: array
-          description: LLM coding-assistant rule files to include so agents can edit the SDK safely
-          items:
-            type: string
-            enum:
-            - claude_code
-            - cursor
-            - gemini
-            - github_copilot
-    SdkGenerationList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SdkGeneration'
-        total:
-          type: integer
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+    sdkId:
+      name: sdkId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the SDK generation job
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
