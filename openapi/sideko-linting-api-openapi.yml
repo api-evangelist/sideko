@@ -48,6 +48,17 @@ paths:
           description: API project not found
 components:
   schemas:
+    LintRequest:
+      type: object
+      properties:
+        versionId:
+          type: string
+          format: uuid
+          description: API version to lint (defaults to latest if omitted)
+        errorsOnly:
+          type: boolean
+          default: false
+          description: Return only blocking errors, omit advisory warnings
     LintIssue:
       type: object
       properties:
@@ -83,17 +94,6 @@ components:
         warningCount:
           type: integer
           description: Number of severity=warn findings
-    LintRequest:
-      type: object
-      properties:
-        versionId:
-          type: string
-          format: uuid
-          description: API version to lint (defaults to latest if omitted)
-        errorsOnly:
-          type: boolean
-          default: false
-          description: Return only blocking errors, omit advisory warnings
   parameters:
     projectId:
       name: projectId

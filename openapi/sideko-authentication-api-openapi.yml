@@ -77,14 +77,13 @@ paths:
           description: API key not found
 components:
   schemas:
-    ApiKeyCreated:
-      allOf:
-      - $ref: '#/components/schemas/ApiKey'
-      - type: object
-        properties:
-          key:
-            type: string
-            description: Full API key value (only returned at creation time)
+    ApiKeyList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiKey'
     ApiKey:
       type: object
       properties:
@@ -110,13 +109,14 @@ components:
         name:
           type: string
           description: Human-readable name for the API key
-    ApiKeyList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiKey'
+    ApiKeyCreated:
+      allOf:
+      - $ref: '#/components/schemas/ApiKey'
+      - type: object
+        properties:
+          key:
+            type: string
+            description: Full API key value (only returned at creation time)
   parameters:
     keyId:
       name: keyId

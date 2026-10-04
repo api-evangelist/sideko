@@ -85,7 +85,31 @@ paths:
         '404':
           description: Mock server not found
 components:
+  parameters:
+    serverId:
+      name: serverId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the mock server
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
   schemas:
+    MockServerList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MockServer'
     DeployMockServerRequest:
       type: object
       required:
@@ -95,13 +119,6 @@ components:
           type: string
           format: uuid
           description: ID of the API version to deploy mock server for
-    MockServerList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/MockServer'
     MockServer:
       type: object
       properties:
@@ -129,23 +146,6 @@ components:
           type: string
           format: date-time
           description: Timestamp when the mock server was deployed
-  parameters:
-    serverId:
-      name: serverId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the mock server
-    projectId:
-      name: projectId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the API project
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

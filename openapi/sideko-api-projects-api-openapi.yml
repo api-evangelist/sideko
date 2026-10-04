@@ -138,43 +138,16 @@ paths:
         '404':
           description: API project not found
 components:
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
   schemas:
-    CreateApiProjectRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Name for the API project
-        description:
-          type: string
-          description: Optional description of the API
-    UpdateApiProjectRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: New name for the API project
-        description:
-          type: string
-          description: Updated description of the API
-    ApiProjectList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiProject'
-        total:
-          type: integer
-          description: Total number of projects
-        page:
-          type: integer
-          description: Current page number
-        limit:
-          type: integer
-          description: Number of results per page
     ApiProject:
       type: object
       properties:
@@ -202,15 +175,42 @@ components:
           type: string
           format: date-time
           description: Timestamp when the project was last updated
-  parameters:
-    projectId:
-      name: projectId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the API project
+    CreateApiProjectRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Name for the API project
+        description:
+          type: string
+          description: Optional description of the API
+    ApiProjectList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiProject'
+        total:
+          type: integer
+          description: Total number of projects
+        page:
+          type: integer
+          description: Current page number
+        limit:
+          type: integer
+          description: Number of results per page
+    UpdateApiProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New name for the API project
+        description:
+          type: string
+          description: Updated description of the API
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

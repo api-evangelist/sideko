@@ -89,7 +89,33 @@ paths:
         '404':
           description: SDK generation job not found
 components:
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the API project
+    sdkId:
+      name: sdkId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Unique identifier of the SDK generation job
   schemas:
+    SdkGenerationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SdkGeneration'
+        total:
+          type: integer
     TriggerSdkRequest:
       type: object
       required:
@@ -124,15 +150,6 @@ components:
             - cursor
             - gemini
             - github_copilot
-    SdkGenerationList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SdkGeneration'
-        total:
-          type: integer
     SdkGeneration:
       type: object
       properties:
@@ -191,23 +208,6 @@ components:
           type: string
           format: date-time
           description: Timestamp when the generation job completed
-  parameters:
-    projectId:
-      name: projectId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the API project
-    sdkId:
-      name: sdkId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: Unique identifier of the SDK generation job
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
