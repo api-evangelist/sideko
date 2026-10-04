@@ -1,0 +1,65 @@
+slug: sideko
+provider: Sideko
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: SDK Generation
+  spec_file: sideko-sdk-generation-api-openapi.yml
+  capability_id: BC-4270.20
+  capability_id_l1: BC-4270
+  capability_name: SDK & Client Library Management
+  confidence: 0.92
+  evidence: POST /api-projects/{projectId}/sdks  triggerSdkGeneration  Trigger SDK Generation; "generate
+    SDKs in six languages"
+  reason: Operations generate and track SDKs/client libraries in multiple languages from an API specification
+    — exactly SDK & Client Library Management.
+- tag: API Versions
+  spec_file: sideko-api-versions-api-openapi.yml
+  capability_id: BC-4270.10
+  capability_id_l1: BC-4270
+  capability_name: Public API Lifecycle Management
+  confidence: 0.85
+  evidence: POST /api-projects/{projectId}/versions createApiVersion; GET .../versions/{versionId}/download
+    downloadApiVersionSpec
+  reason: Creating and downloading versioned OpenAPI specifications is squarely specification and versioning
+    of public APIs (BC-4270.10 Public API Lifecycle Management).
+- tag: Documentation
+  spec_file: sideko-documentation-api-openapi.yml
+  capability_id: BC-4270.30
+  capability_id_l1: BC-4270
+  capability_name: Developer Portal Management
+  confidence: 0.85
+  evidence: POST /api-projects/{projectId}/docs deployDocumentationSite Deploy Documentation Site
+  reason: Deploying and listing API documentation sites realises Developer Portal Management — documentation
+    and interactive references that help developers integrate.
+- tag: API Projects
+  spec_file: sideko-api-projects-api-openapi.yml
+  capability_id: BC-4270.10
+  capability_id_l1: BC-4270
+  capability_name: Public API Lifecycle Management
+  confidence: 0.8
+  evidence: POST /api-projects createApiProject; UpdateApiProjectRequest, ApiProjectList
+  reason: API projects are the container for an OpenAPI specification from which SDKs, docs and mocks
+    are generated — i.e. lifecycle management of APIs exposed to developers. Sub-capability choice between
+    project container and public API lifecycle is somewhat arguable.
+- tag: MCP Generation
+  spec_file: sideko-mcp-generation-api-openapi.yml
+  capability_id: BC-4270
+  capability_id_l1: BC-4270
+  capability_name: Developer Platform & API Ecosystem Management
+  confidence: 0.7
+  evidence: POST /api-projects/{projectId}/mcps  triggerMcpGeneration  Trigger MCP Generation; "generate
+    Model Context Protocol (MCP) servers"
+  reason: Operations generate machine-consumable server/client artefacts from an API project's OpenAPI
+    spec, which is developer platform / API ecosystem tooling. It is adjacent to SDK generation but an
+    MCP server is not strictly a client SDK, so only the L1 is asserted.

@@ -619,6 +619,9 @@ description: >-
   Magic Hour AI; Sideko's published Stripe SDK benchmark generated over one million lines of SDK code in under sixty
   seconds.
 common:
+  - type: CapabilityMap
+    url: capabilities/sideko-capability-edges.yml
+    name: Sideko Business Capability Map
   - type: VendorFacets
     url: vendor-facets/sideko-vendor-facets.yml
   - type: PostmanWorkspace
